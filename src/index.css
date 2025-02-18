@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+body{
+  background-color: rgb(0, 0, 0);
+  color: black;
+  border-radius: 15px;
+}
+
+.container{
+  margin: 0 auto;
+  max-width: 1400px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
