@@ -10,6 +10,10 @@ RUN npm install
 # Copy all project files
 COPY . .
 
+# Set environment variable for backend API
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+
 # Expose the Vite development port
 EXPOSE 5173
 
