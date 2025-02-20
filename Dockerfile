@@ -1,33 +1,26 @@
-# Use Node.js Alpine as the base image for building
-FROM node:18-alpine3.20 as build
+# Use Node.js Alpine as the base image
+FROM node:alpine3.20 as build
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if present) to leverage caching
-COPY package*.json . 
-
-# Install dependencies
+# Copy package.json and install dependencies
+COPY package.json . 
 RUN npm install
 
-# Copy all project files
+# Copy all project files and build
 COPY . .
-
-# Set environment variable for backend API
-ARG VITE_API_BASE_URL
-ENV VITE_API_BASE_URL=${VITE_BackendURL}
-
-# Build the Vite React app
+ARG VITE_BackendURL
+ENV VITE_BackendURL=${VITE_BackendURL}
 RUN npm run build
 
-# Use Nginx to serve the build
+# Serve with Nginx
 FROM nginx:1.23-alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -rf *
+COPY --from=build /app/dist .
 
-# Copy the built files from the previous stage
-COPY --from=build /app/dist /usr/share/nginx/html
+# Copy Nginx configuration
+COPY default.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
 EXPOSE 80
-
-# Start Nginx server
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
