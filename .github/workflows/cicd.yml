@@ -19,7 +19,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t abhinavdogra003768/frontend:latest \
-            --build-arg VITE_API_BASE_URL='http://13.126.144.181:8000' .
+            --build-arg VITE_API_BASE_URL='http://13.232.35.33:8000' .
 
       - name: Publish Image to Docker Hub
         run: docker push abhinavdogra003768/frontend:latest
@@ -44,5 +44,5 @@ jobs:
       - name: Run New Docker Container
         run: |
           docker run -d --name frontend-container -p 80:80 \
-            -e VITE_API_BASE_URL='http://13.126.144.181:8000' \
+            -e VITE_API_BASE_URL='http://13.232.35.33:8000' \
             abhinavdogra003768/frontend:latest
