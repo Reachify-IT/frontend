@@ -30,11 +30,16 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Pull Image from Docker Hub
-        run: docker pull abhinavdogra003768/frontend:latest
+        run: sudo docker pull abhinavdogra003768/frontend:latest
 
-      - name: Stop and Remove Old Container (if exists)
+      - name: Force Stop and Remove Old Container (if exists)
         run: |
-          docker ps -q --filter "name=frontend-container" | grep -q . && docker stop frontend-container && docker rm frontend-container || echo "No existing container to remove."
+          if [ $(sudo docker ps -aq -f name=frontend-container) ]; then
+            echo "Removing existing container..."
+            sudo docker rm -f frontend-container
+          else
+            echo "No existing container found."
+          fi
 
       - name: Run New Docker Container
         run: |
