@@ -23,14 +23,14 @@ ChartJS.register(
 
 const BarChart = () => {
   const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     datasets: [
       {
         label: "Monthly Sales",
         backgroundColor: 'rgb(255, 0, 0)',
         hoverBackgroundColor: 'rgb(255, 101, 98)',
         borderRadius: 10, // Rounded corners
-        data: [186, 305, 237, 73, 209, 214],
+        data: [186, 305, 237, 73, 209, 214, 190, 250, 200, 250, 50, 230],
       },
     ],
   };

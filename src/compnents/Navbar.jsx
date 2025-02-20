@@ -14,7 +14,7 @@ export function Navbar() {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:8000/api/auth/logout");
+      await axios.post(`${import.meta.env.VITE_BackendURL}/api/auth/logout`);
   
       dispatch(logout());
   

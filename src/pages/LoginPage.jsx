@@ -7,7 +7,7 @@ import { loginRequest, loginSuccess, loginFailure } from "../../features/userSli
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [username, setUsername] = useState("");
+  const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,8 +22,8 @@ function LoginPage() {
     dispatch(loginRequest());
 
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/signin", {
-        username,
+      const response = await axios.post(`${import.meta.env.VITE_BackendURL}/api/auth/signin`, {
+        email,
         password,
       });
       const { token, user } = response.data;
@@ -47,19 +47,19 @@ function LoginPage() {
         <h1 className="text-4xl font-bold text-center">Welcome Back! 👋🏻</h1>
         <div className="form flex flex-col pt-10 w-full">
           <form onSubmit={handleLogin} className="flex flex-col gap-5 w-full">
-            {/* Username Field */}
+            {/* email Field */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="username" className="font-semibold text-lg">
-                Username
+              <label htmlFor="email" className="font-semibold text-lg">
+                email
               </label>
               <input
                 type="text"
-                name="username"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                name="email"
+                id="email"
+                value={email}
+                onChange={(e) => setemail(e.target.value)}
                 className="border-2 border-blue-700 rounded-3xl py-3 px-4 placeholder:text-blue-700 focus:outline-none text-lg placeholder:font-semibold w-full"
-                placeholder="Enter your username"
+                placeholder="Enter your email"
                 required
               />
             </div>

@@ -158,9 +158,9 @@ export function HomePage() {
                         )}
 
                         {activeSection === "dashboard" && (
-                           <>
-                           <PanelSectionCard/>
-                           </>
+                            <>
+                                <PanelSectionCard />
+                            </>
                         )}
 
                         {activeSection === "mobile" && (
