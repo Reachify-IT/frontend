@@ -14,6 +14,7 @@ import { BiSolidMessageDots } from "react-icons/bi";
 import Settings from "../compnents/Settings";
 import FeedbackForm from "../compnents/FeedbackForm";
 import PanelSectionCard from "../compnents/PanelSectionCard";
+import Notifications from "../compnents/Notifications ";
 
 
 const notifications = [
@@ -229,7 +230,7 @@ export function HomePage() {
 
                         {activeSection === "notifications" && (
                             <>
-                                <div className="relative flex flex-col gap-4 z-50 py-2 overflow-y-auto h-[80vh] lg:h-[450px] px-4 bg-tranprent rounded-lg no-scrollbar">
+                                {/* <div className="relative flex flex-col gap-4 z-50 py-2 overflow-y-auto h-[80vh] lg:h-[450px] px-4 bg-tranprent rounded-lg no-scrollbar">
                                     {notifications.map((notification) => (
                                         <div key={notification.id} className="flex items-center bg-blue-100 py-3 rounded-3xl px-5 shadow-md">
                                             <div>
@@ -241,7 +242,8 @@ export function HomePage() {
                                             </div>
                                         </div>
                                     ))}
-                                </div>
+                                </div> */}
+                                <Notifications/>
                             </>
                         )}
 

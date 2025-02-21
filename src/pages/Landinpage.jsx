@@ -77,7 +77,7 @@ export default function Landinpage() {
                                 </button>
                             </Link>
                             <Link to="/sign-up">
-                                <button className="bg-blue-700 hover:bg-transparent border border-blue-700 px-10 py-3 text-white rounded-3xl relative z-10 transition-all duration-300 ease-in-out">
+                                <button className="bg-blue-700 hover:bg-transparent border border-blue-700 px-10 py-3 text-white hover:text-blue-700 rounded-3xl relative z-10 transition-all duration-300 ease-in-out">
                                     Start Your Free Trial
                                 </button>
                             </Link>
@@ -103,7 +103,7 @@ export default function Landinpage() {
                                     </button>
                                 </Link>
                                 <Link to="/sign-up">
-                                    <button className="bg-blue-700 hover:bg-transparent border border-blue-700 px-10 py-3 text-white rounded-3xl relative z-10 transition-all duration-300 ease-in-out">
+                                    <button className="bg-blue-700 hover:bg-transparent border border-blue-700 px-10 py-3 text-white hover:text-blue-900 rounded-3xl relative z-10 transition-all duration-300 ease-in-out">
                                         Start Your Free Trial
                                     </button>
                                 </Link>

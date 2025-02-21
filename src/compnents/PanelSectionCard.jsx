@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaPlay, FaPlayCircle, FaCopy } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 import { FaPen } from "react-icons/fa";
@@ -151,6 +151,38 @@ function PanelSectionCard() {
   };
 
 
+  const [videos, setVideos] = useState([]);
+  const [error, setError] = useState(null);
+
+  // const fetchAllProcessedVideos = async () => {
+  //   const token = localStorage.getItem("accessToken");
+  
+  //   try {
+  //     const response = await axios.get(
+  //       `${import.meta.env.VITE_BackendURL}/api/excel/all-videos`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `${token}`,
+  //         },
+  //       }
+  //     );
+  //     setVideos(response.data); // Store data in state
+  //   } catch (error) {
+  //     console.error("Error fetching processed videos:", error);
+  //     setError(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  
+  useEffect(() => {
+    // fetchAllProcessedVideos();
+  }, []);
+  
+
+
+  console.log("videos",videos);
 
   const handleStart = async () => {
     if (!fileInputRef.current.files[0] || !fileInputRefRecord.current.files[0]) {
@@ -159,7 +191,7 @@ function PanelSectionCard() {
     }
 
     setLoading(true);
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("accessToken");
 
     try {
       // Upload files sequentially and wait for completion
@@ -191,7 +223,7 @@ function PanelSectionCard() {
   };
 
   const handleStop = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("accessToken");
     setStopLoading(true);
 
     try {

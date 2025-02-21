@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginRequest, loginSuccess, loginFailure } from "../../features/userSlice";
+import { toast } from "react-toastify";
+import { FaCheckCircle } from "react-icons/fa";
+
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,29 +18,56 @@ function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setLoading(true);
     dispatch(loginRequest());
-
+  
     try {
       const response = await axios.post(`${import.meta.env.VITE_BackendURL}/api/auth/signin`, {
         email,
         password,
       });
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      dispatch(loginSuccess({ user, token }));
+  
+      const { accessToken, user } = response.data;
+      localStorage.setItem("accessToken", accessToken);
+      dispatch(loginSuccess({ user, accessToken }));
+  
+      // Show success toast
+      toast.info("Login successful!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        icon: <FaCheckCircle  className="text-blue-500 h-16 w-16"/>,
+        theme: "light",
+      });
+  
       navigate("/home");
     } catch (error) {
       const errorMsg = error.response?.data?.message || "Login failed!";
       setErrorMessage(errorMsg);
       dispatch(loginFailure(errorMsg));
+  
+      // Show error toast
+      toast.error(errorMsg, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="relative overflow-hidden flex justify-center items-center h-screen w-screen bg-white rounded-4xl">

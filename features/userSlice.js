@@ -2,11 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Retrieve stored user data and token from localStorage
 const storedUser = JSON.parse(localStorage.getItem("user")) || null;
-const storedToken = localStorage.getItem("token") || null;
+const storedToken = localStorage.getItem("accessToken") || null;
 
 const initialState = {
   user: storedUser, // Load user from storage
-  token: storedToken, // Load token from storage
+  accessToken: storedToken, // Load token from storage
   isAuthenticated: !!storedToken, // User is authenticated if token exists
   loading: false, // Loading state
   error: null, // Error messages
@@ -39,7 +39,7 @@ const userSlice = createSlice({
 
       // Clear localStorage on failure
       localStorage.removeItem("user");
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
     },
     logout: (state) => {
       state.user = null;
@@ -49,7 +49,7 @@ const userSlice = createSlice({
 
       // Clear localStorage on logout
       localStorage.removeItem("user");
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
     },
   },
 });
