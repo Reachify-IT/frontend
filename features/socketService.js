@@ -7,7 +7,7 @@ class SocketService {
 
   connect() {
     if (!this.socket) {
-      this.socket = io("http://localhost:8000"); // Change this in production
+      this.socket = io(`${import.meta.env.VITE_BackendURL}`); // Change this in production
 
       this.socket.on("connect", () => {
         console.log("Connected to WebSocket server");
