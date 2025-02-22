@@ -9,8 +9,11 @@ const notificationSlice = createSlice({
     addNotification: (state, action) => {
       state.notifications.push(action.payload);
     },
+    resetNotifications: (state) => {
+      state.notifications = []; // Clear notifications on logout
+    },
   },
 });
 
-export const { addNotification } = notificationSlice.actions;
+export const { addNotification,resetNotifications  } = notificationSlice.actions;
 export default notificationSlice.reducer;

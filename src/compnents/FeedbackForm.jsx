@@ -1,5 +1,7 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
 
 function FeedbackForm() {
   const [rating, setRating] = useState(0);
@@ -9,15 +11,82 @@ function FeedbackForm() {
     email: "",
     description: "",
   });
+  const [loading, setLoading] = useState(false); // State to track submission
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Feedback Submitted:", { ...formData, rating });
+  
+    const token = localStorage.getItem("accessToken");
+  
+    if (!formData.name || !formData.email || !formData.description || rating === 0) {
+      toast.error("Please fill all fields and provide a rating!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+  
+    const feedbackData = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      description: formData.description.trim(),
+      rating,
+    };
+  
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BackendURL}/api/feedback/submit`,
+        feedbackData, // This should be the second argument
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`, // Added "Bearer" for better security
+          },
+        }
+      );
+  
+      console.log("Response:", response.data);
+      toast.success("Feedback submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+  
+      // Reset form
+      setFormData({ name: "", email: "", description: "" });
+      setRating(0);
+      setHover(0);
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast.error("Failed to submit feedback. Please try again later.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+  
+
 
   return (
     <div className="flex justify-center items-center">
@@ -93,9 +162,10 @@ function FeedbackForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-700 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition-all cursor-pointer"
+          className="w-full bg-blue-700 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition-all cursor-pointer disabled:opacity-50"
+          disabled={loading}
         >
-          Submit Feedback
+          {loading ? "Submitting..." : "Submit Feedback"}
         </button>
       </form>
     </div>

@@ -6,6 +6,7 @@ import { logout } from "../../features/userSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaCheckCircle } from "react-icons/fa";
+import { resetNotifications } from "../../features/notificationSlice";
 
 
 
@@ -22,6 +23,7 @@ export function Navbar() {
       await axios.post(`${import.meta.env.VITE_BackendURL}/api/auth/logout`);
 
       dispatch(logout());
+      dispatch(resetNotifications());
       localStorage.removeItem("accessToken");
       navigate("/login");
 

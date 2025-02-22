@@ -32,6 +32,8 @@ function LoginPage() {
       });
   
       const { accessToken, user } = response.data;
+
+      console.log("user",response.data)
       localStorage.setItem("accessToken", accessToken);
       dispatch(loginSuccess({ user, accessToken }));
   

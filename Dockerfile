@@ -23,10 +23,10 @@ WORKDIR /app
 COPY --from=build /app/dist .
 
 
-# Clean default Nginx static assets and configuration
-WORKDIR /usr/share/nginx/html
-RUN rm -rf /usr/share/nginx/html/* \
-    && rm -f /etc/nginx/conf.d/default.conf
+# # Clean default Nginx static assets and configuration
+# WORKDIR /usr/share/nginx/html
+# RUN rm -rf /usr/share/nginx/html/* \
+#     && rm -f /etc/nginx/conf.d/default.conf
 
 
 # Install http-server globally

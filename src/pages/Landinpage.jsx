@@ -98,12 +98,12 @@ export default function Landinpage() {
                             {/* Buttons */}
                             <div className="flex items-center gap-5">
                                 <Link to="/login">
-                                    <button className="hover:bg-blue-700 border border-blue-700 px-10 py-3 text-black hover:text-white rounded-3xl relative z-10 transition-all duration-300 ease-in-out">
+                                    <button className="hover:bg-blue-700 border border-blue-700 px-10 py-3 text-black hover:text-white rounded-3xl relative z-10 transition-all duration-300 ease-in-out cursor-pointer">
                                         Sign In
                                     </button>
                                 </Link>
                                 <Link to="/sign-up">
-                                    <button className="bg-blue-700 hover:bg-transparent border border-blue-700 px-10 py-3 text-white hover:text-blue-900 rounded-3xl relative z-10 transition-all duration-300 ease-in-out">
+                                    <button className="bg-blue-700 hover:bg-transparent border border-blue-700 px-10 py-3 text-white hover:text-blue-900 rounded-3xl relative z-10 transition-all duration-300 ease-in-out cursor-pointer">
                                         Start Your Free Trial
                                     </button>
                                 </Link>
@@ -114,11 +114,11 @@ export default function Landinpage() {
                 {/* heroSection */}
                 <section className=" relative z-10 flex justify-center items-center h-full bg-transprent py-32">
                     <div className='relative z-20 flex items-center text-center justify-center flex-col lg:px-3 px-0'>
-                        <h1 className="text-4xl lg:text-6xl font-bold text-center">Loomify: Simplifying Business Communication with Expert Videos  </h1>
-                        <p className='sm:text-3xl text-2xl py-5'>Loomify help business to make engaging videos for presentation and simplify the communication </p>
+                        <h1 className="text-4xl lg:text-6xl font-bold text-center">Loomify: help in conversion of dead leads with Engaging and AI Personalized video outreach   </h1>
+                        <p className='sm:text-xl text-2xl py-5'> Loomify helps you make and send videos instead of long talks for  any kind of business Cummunication in any corporate </p>
                         <div>
                             <Link to='/sign-up'>
-                                <button className='mt-5 hover:border-blue-700 hover:text-black hover:bg-transparent border broder-white bg-blue-700 px-10 py-3 text-white rounded-3xl cursor-pointer font-semibold relative z-10 transition-all duration-300 ease-in-out'>Start Your Free Trail</button>
+                                <button className='mt-5 hover:border-blue-700 hover:text-black hover:bg-transparent border broder-white bg-blue-700 px-10 py-3 text-white rounded-3xl cursor-pointer font-semibold relative z-10 transition-all duration-300 ease-in-out '>Start Your Free Trail</button>
                             </Link>
                         </div>
                     </div>
