@@ -3,7 +3,7 @@ name: Deploy Node Application
 on: 
   push:
     branches:
-      - aws-ec2
+      - main
 
 jobs:
   build:
