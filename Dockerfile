@@ -1,46 +1,19 @@
-# Stage 1: Build the React App
-FROM node:alpine3.20 AS build
+FROM node:alpine3.18 as build
 
-WORKDIR /app
-
-# Install dependencies
-COPY package*.json . 
-RUN npm ci
-
-# Copy all project files and build
-COPY . .
+# Declare build time environment variables
 ARG VITE_BackendURL
-ENV VITE_BackendURL=$VITE_BackendURL
+
+# Build App
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
 RUN npm run build
 
-# Use a lightweight HTTP server to serve the React app
-FROM node:alpine3.20
-
-# Set working directory
-WORKDIR /app
-
-# Copy build files
-COPY --from=build /app/dist .
-
-
-# # Clean default Nginx static assets and configuration
-# WORKDIR /usr/share/nginx/html
-# RUN rm -rf /usr/share/nginx/html/* \
-#     && rm -f /etc/nginx/conf.d/default.conf
-
-
-# Install http-server globally
-RUN npm install -g http-server
-
+# Serve with Nginx
+FROM nginx:1.23-alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -rf *
+COPY --from=build /app/build .
 EXPOSE 80
-CMD ["http-server", "-p", "80"]
-
-
-
-
-# # Copy build files and custom Nginx configuration
-# # COPY --from=build /app/dist .
-# # COPY default.conf /etc/nginx/conf.d/
-
-# EXPOSE 80
-# ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
