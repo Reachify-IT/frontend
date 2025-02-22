@@ -12,6 +12,17 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin     
 
@@ -20,11 +31,13 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build --no-cache -t abhinavdogra003768/frontend:latest
+          docker build --no-cache -t abhinavdogra003768/frontend:latest \
+            -t abhinavdogra003768/frontend:${{ github.sha }} .
 
       - name: Publish Image to Docker Hub
-        run: docker push abhinavdogra003768/frontend:latest
-
+        run: |
+          docker push abhinavdogra003768/frontend:latest
+          docker push abhinavdogra003768/frontend:${{ github.sha }}
 
   deploy:
     needs: build
@@ -37,7 +50,7 @@ jobs:
         run: |
           if [ $(sudo docker ps -aq -f name=frontend-container) ]; then
             echo "Stopping and removing existing container..."
-            sudo docker rm -f frontend-container
+            sudo docker rm -f frontend-container || true
           else
             echo "No existing container found."
           fi
@@ -47,11 +60,11 @@ jobs:
           old_images=$(sudo docker images -q abhinavdogra003768/frontend | tail -n +2)
           if [ -n "$old_images" ]; then
             echo "Removing old images..."
-            echo "$old_images" | xargs sudo docker rmi -f
+            echo "$old_images" | xargs sudo docker rmi -f || true
           else
             echo "No old images to remove."
           fi
 
       - name: Run New Docker Container
         run: |
-          docker run -d --name frontend-container -p 80:80 abhinavdogra003768/frontend:latest
+          sudo docker run -d --name frontend-container -p 80:80 abhinavdogra003768/frontend:latest
