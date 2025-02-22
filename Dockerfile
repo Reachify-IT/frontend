@@ -13,17 +13,34 @@ ARG VITE_BackendURL
 ENV VITE_BackendURL=$VITE_BackendURL
 RUN npm run build
 
-# Stage 2: Serve with Nginx
-FROM nginx:1.23-alpine
+# Use a lightweight HTTP server to serve the React app
+FROM node:alpine3.20
+
+# Set working directory
+WORKDIR /app
+
+# Copy build files
+COPY --from=build /app/dist .
+
 
 # Clean default Nginx static assets and configuration
 WORKDIR /usr/share/nginx/html
 RUN rm -rf /usr/share/nginx/html/* \
     && rm /etc/nginx/conf.d/default.conf
 
-# Copy build files and custom Nginx configuration
-COPY --from=build /app/dist .
-COPY default.conf /etc/nginx/conf.d/
+
+# Install http-server globally
+RUN npm install -g http-server
 
 EXPOSE 80
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+CMD ["http-server", "-p", "80"]
+
+
+
+
+# # Copy build files and custom Nginx configuration
+# # COPY --from=build /app/dist .
+# # COPY default.conf /etc/nginx/conf.d/
+
+# EXPOSE 80
+# ENTRYPOINT ["nginx", "-g", "daemon off;"]
