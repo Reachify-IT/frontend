@@ -7,15 +7,13 @@ import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { VscPreview } from "react-icons/vsc";
 import BarChart from "../compnents/BarChart";
 import CreateDoughnutData from "../compnents/CreateDoughnutData";
-import { FaUser } from "react-icons/fa";
-import { FaRegBuilding } from "react-icons/fa";
-import { HiUserGroup } from "react-icons/hi2";
-import { BiSolidMessageDots } from "react-icons/bi";
+
 import Settings from "../compnents/Settings";
 import FeedbackForm from "../compnents/FeedbackForm";
 import PanelSectionCard from "../compnents/PanelSectionCard";
 import Notifications from "../compnents/Notifications ";
 import { useSelector } from "react-redux";
+import PricingSection from "../compnents/PricingSection";
 
 
 export function HomePage() {
@@ -126,65 +124,7 @@ export function HomePage() {
 
                         {activeSection === "mobile" && (
                             <>
-                                <div className="flex flex-wrap items-center justify-center gap-10 relative z-50 mt-5">
-                                    <div className="card w-64 bg-blue-100 px-7 py-5 rounded-2xl">
-                                        <div className="card-img h-16 w-16 flex items-center justify-center">
-                                            <FaUser className="h-16 w-16 text-blue-700" />
-                                        </div>
-                                        <div className="flex flex-col gap-2 mt-4">
-                                            <h1 className="text-2xl font-bold">Individual Plan</h1>
-                                            <h2 className="text-2xl font-bold text-red-500">$20</h2>
-                                            <p className="text-center text-lg">For Solo Professionals</p>
-                                        </div>
-                                        <div className="border-t p-5 mt-2">
-                                            <ul className="list-disc font-semibold">
-                                                <li>Limit: 2,000 Looms</li>
-                                                <li> Ideal for freelancers    & solo users</li>
-                                            </ul>
-                                        </div>
-                                        <div className="flex items-center justify-center">
-                                            <button className="bg-blue-700 text-sm px-7 py-3 flex items-center justify-center text-white font-semibold rounded-2xl cursor-pointer hover:bg-blue-800">Start 3-day FREE trial </button>
-                                        </div>
-                                    </div>
-                                    <div className="card w-64 bg-blue-100 px-7 py-5 rounded-2xl">
-                                        <div className="card-img h-16 w-16 flex items-center justify-center">
-                                            <HiUserGroup className="h-16 w-16 text-blue-700" />
-                                        </div>
-                                        <div className="flex flex-col gap-2 mt-4">
-                                            <h1 className="text-2xl font-bold">Small Team Plan</h1>
-                                            <h2 className="text-2xl font-bold text-red-500">$60</h2>
-                                            <p className="text-center text-lg">For Solo Professionals</p>
-                                        </div>
-                                        <div className="border-t p-5 mt-2">
-                                            <ul className="list-disc font-semibold">
-                                                <li>Limit: 6,000 Looms</li>
-                                                <li> Ideal for freelancers    & solo users</li>
-                                            </ul>
-                                        </div>
-                                        <div className="flex items-center justify-center">
-                                            <button className="bg-blue-700 text-sm px-7 py-3 flex items-center justify-center text-white font-semibold rounded-2xl cursor-pointer hover:bg-blue-800">Start 3-day FREE trial </button>
-                                        </div>
-                                    </div>
-                                    <div className="card w-64 bg-blue-100 px-7 py-5 rounded-2xl">
-                                        <div className="card-img h-16 w-16 flex items-center justify-center">
-                                            <FaRegBuilding className="h-14 w-14 text-blue-700" />
-                                        </div>
-                                        <div className="flex flex-col gap-2 mt-4">
-                                            <h1 className="text-2xl font-bold">Agency Plan</h1>
-                                            <h2 className="text-2xl font-bold text-red-500">$150</h2>
-                                            <p className="text-center text-lg">For Solo Professionals</p>
-                                        </div>
-                                        <div className="border-t p-5 mt-2">
-                                            <ul className="list-disc font-semibold">
-                                                <li>Limit: 20,000 Looms</li>
-                                                <li> Ideal for freelancers    & solo users</li>
-                                            </ul>
-                                        </div>
-                                        <div className="flex items-center justify-center">
-                                            <button className="bg-blue-700 text-sm px-7 py-3 flex items-center justify-center text-white font-semibold rounded-2xl cursor-pointer hover:bg-blue-800">Start 3-day FREE trial </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <PricingSection/>
                             </>
                         )}
 

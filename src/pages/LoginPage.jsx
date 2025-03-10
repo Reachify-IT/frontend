@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { loginRequest, loginSuccess, loginFailure } from "../../features/userSlice";
 import { toast } from "react-toastify";
 import { FaCheckCircle } from "react-icons/fa";
+import socketService from "../../features/socketService";
 
 
 function LoginPage() {
@@ -32,9 +33,12 @@ function LoginPage() {
       });
   
       const { accessToken, user } = response.data;
-
-      console.log("user",response.data)
+      console.log("user", response.data);
+  
+      const expiresAt = new Date().getTime() + 7 * 60 * 60 * 1000; // 7 hours in milliseconds
+  
       localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("tokenExpiry", expiresAt); // Store expiration time
       dispatch(loginSuccess({ user, accessToken }));
   
       // Show success toast
@@ -45,9 +49,10 @@ function LoginPage() {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        icon: <FaCheckCircle  className="text-blue-500 h-16 w-16"/>,
+        icon: <FaCheckCircle className="text-blue-500 h-16 w-16" />,
         theme: "light",
       });
+      socketService.connect(user?._id);
   
       navigate("/home");
     } catch (error) {

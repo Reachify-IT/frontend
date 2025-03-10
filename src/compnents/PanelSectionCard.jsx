@@ -10,6 +10,7 @@ import axios from 'axios';
 import { ImSpinner2 } from "react-icons/im";
 import { toast } from "react-toastify";
 import { FaCheckCircle } from "react-icons/fa";
+import { AiOutlineDownload } from "react-icons/ai";
 
 
 
@@ -193,9 +194,10 @@ function PanelSectionCard() {
   const [videos, setVideos] = useState([]);
   const [error, setError] = useState(null);
 
+  
   const fetchAllProcessedVideos = async () => {
     const token = localStorage.getItem("accessToken");
-
+  
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BackendURL}/api/excel/all-videos`,
@@ -206,18 +208,34 @@ function PanelSectionCard() {
           },
         }
       );
+  
       setVideos(response.data); // Store data in state
+      toast.success("✅ Processed videos fetched successfully!", {
+        position: "top-right",
+        autoClose: 3000, // Closes after 3 seconds
+      });
     } catch (error) {
       console.error("Error fetching processed videos:", error);
       setError(error);
+      toast.error("❌ Failed to fetch processed videos!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } finally {
       setLoading(false);
     }
   };
+  
+
+  const isFetched = useRef(false); // ✅ Track fetch status
 
   useEffect(() => {
-    fetchAllProcessedVideos();
+    if (!isFetched.current) {
+      fetchAllProcessedVideos();
+      isFetched.current = true; // Prevent re-fetch
+    }
   }, []);
+  
 
 
 
@@ -368,13 +386,55 @@ function PanelSectionCard() {
 
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(selectedNotification.mergedUrl);
-    setCopied(true);
-
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000); // Show "Copied!" for 2 seconds
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(selectedNotification.mergedUrl)
+        .then(() => setCopied(true))
+        .catch((err) => console.error("Clipboard copy failed:", err));
+    } else {
+      // Fallback: Create a temporary input field
+      const textArea = document.createElement("textarea");
+      textArea.value = selectedNotification.mergedUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopied(true);
+    }
+  
+    setTimeout(() => setCopied(false), 2000);
   };
+  
+
+  const handleDownload = () => {
+    const fileName = "demo.xlsx"; // Replace with your actual file name
+    const fileUrl = `/demo_websites.xlsx`; // Relative path from the public folder
+  
+    try {
+      // Create an anchor element
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.setAttribute("download", fileName); // Force download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  
+      // ✅ Show success toast notification
+      toast.success("✅ File downloaded successfully!", {
+        position: "top-right",
+        autoClose: 3000, // Closes after 3 seconds
+      });
+    } catch (error) {
+      console.error("❌ File download error:", error);
+  
+      // ❌ Show error toast notification
+      toast.error("❌ Failed to download file!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+  };
+  
+  
 
   return (
     <>
@@ -438,30 +498,36 @@ function PanelSectionCard() {
                         </div>
                       </div>
 
-                      <div className="bg-blue-100 h-auto sm:h-20 w-full flex flex-col sm:flex-row py-5 px-10 items-center gap-4 rounded-3xl justify-between">
-                        <h1 className="text-center font-normal text-xl capitalize">
-                          {fileName.length > 24 ? fileName.substring(0, 24) + "..." : fileName}
-                        </h1>
-                        {fileName !== "Upload CSV to Start Task" && (
-                          <button onClick={handleRemoveFile} className=" border-2 rounded-full border-blue-400 text-blue-400 cursor-pointer text-xl hover:text-red-800">
-                            <IoClose />
-                          </button>
-                        )}
-                        <input
-                          type="file"
-                          accept=".xlsx, .xls"
-                          className="hidden"
-                          ref={fileInputRef}
-                          id="fileInput"
-                          onChange={handleFileChange}
-                        />
-                        {fileName === "Upload CSV to Start Task" ? (
-                          <label htmlFor="fileInput" className="bg-blue-700 px-12 py-4 text-white rounded-3xl flex items-center gap-1 cursor-pointer hover:bg-blue-800">
-                            <FiUpload /> Upload
-                          </label>
-                        ) : (<label className="text-blue-700 px-12 py-4 font-bold rounded-3xl flex items-center gap-1 " disable>
-                          Uploaded
-                        </label>)}
+
+                      {/* Upload CSV to Start Task */}
+                      <div>
+                        <div className="bg-blue-100 h-auto sm:h-20 w-full flex flex-col sm:flex-row py-5 px-10 items-center gap-4 rounded-3xl justify-between">
+                          <h1 className="text-center font-normal text-xl capitalize">
+                            {fileName.length > 24 ? fileName.substring(0, 24) + "..." : fileName}
+                          </h1>
+                          {fileName !== "Upload CSV to Start Task" && (
+                            <button onClick={handleRemoveFile} className=" border-2 rounded-full border-blue-400 text-blue-400 cursor-pointer text-xl hover:text-red-800">
+                              <IoClose />
+                            </button>
+                          )}
+                          <input
+                            type="file"
+                            accept=".xlsx, .xls"
+                            className="hidden"
+                            ref={fileInputRef}
+                            id="fileInput"
+                            onChange={handleFileChange}
+                          />
+                          {fileName === "Upload CSV to Start Task" ? (
+                            <label htmlFor="fileInput" className="bg-blue-700 px-12 py-4 text-white rounded-3xl flex items-center gap-1 cursor-pointer hover:bg-blue-800">
+                              <FiUpload /> Upload
+                            </label>
+                          ) : (<label className="text-blue-700 px-12 py-4 font-bold rounded-3xl flex items-center gap-1 " disable>
+                            Uploaded
+                          </label>)}
+                        </div>
+
+                        <span className='text-xs text-green-600 font-semibold flex items-center gap-1 py-1 cursor-pointer' onClick={handleDownload}>Download the sample <AiOutlineDownload /> </span>
                       </div>
 
                     </div>
@@ -505,10 +571,10 @@ function PanelSectionCard() {
 
           {activePanel === "data" && (
             <>
-            {videos?.videos.length ===0 &&(
-                   <p className='text-center text-2xl pt-20'>No video found, make your first video. Now</p>
+              {videos?.videos.length === 0 && (
+                <p className='text-center text-2xl pt-20'>No video found, make your first video. Now</p>
               )}
-              <div className="relative w-full flex flex-col gap-4 z-50 py-2 overflow-y-auto h-[80vh] lg:h-[420px] px-4 bg-transparent rounded-lg no-scrollbar scroll-smooth">
+              <div className="relative w-full flex flex-col gap-4 z-50 py-2 overflow-y-auto h-[75vh] lg:h-[420px] px-4 bg-transparent rounded-lg no-scrollbar scroll-smooth">
                 {videos?.videos?.map((videoGroup) =>
                   videoGroup.videos.map((video) => (
                     <div

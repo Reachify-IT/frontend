@@ -61,7 +61,7 @@ export function Navbar() {
   return (
     <div className="fixed top-0 z-50 flex items-center px-10 py-4 w-full">
       <div className="flex justify-between w-full items-center">
-        <Link to="/" >
+        <Link to="/home" >
           <div className="flex items-center gap-2">
             <img src={logo} alt="Logo" className="h-10 w-10 object-contain" />
             <p className="font-semibold text-lg">Loomify</p>

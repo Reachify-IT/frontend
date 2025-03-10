@@ -2,6 +2,34 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import GoogleAuth from "./GoogleAuth";
+
+const imageMap = {
+  "top-left": {
+    small: "https://images.ctfassets.net/r6vlh4dr9f5y/452H07Tf4a4Bgbualq68pE/68594803c196627615e7eb769cc33764/4.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+    medium: "https://images.ctfassets.net/r6vlh4dr9f5y/rLGBofYEGcQUTZN22vX1G/36572d816816b4725cda3f6dd9ef7e0d/A_video_conference_happening_in_Dialpads_desktop_app.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+    large: "https://images.ctfassets.net/r6vlh4dr9f5y/3854686/f8fd3faea55e8b930077320254e93a6a/Screenshare-Full-Screen.png?fm=webp&fit=fill&f=center&w=2176&h=",
+    "extra-large": "https://images.ctfassets.net/r6vlh4dr9f5y/2374430/1db8afb80c2d57801a89c5a94cdc9c1e/Screenshot_of_changing_the_video_background_in_Dialpad_Meetings.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+  },
+  "top-right": {
+    small: "https://images.ctfassets.net/r6vlh4dr9f5y/452H07Tf4a4Bgbualq68pE/68594803c196627615e7eb769cc33764/4.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+    medium: "https://images.ctfassets.net/r6vlh4dr9f5y/rLGBofYEGcQUTZN22vX1G/36572d816816b4725cda3f6dd9ef7e0d/A_video_conference_happening_in_Dialpads_desktop_app.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+    large: "https://images.ctfassets.net/r6vlh4dr9f5y/3854686/f8fd3faea55e8b930077320254e93a6a/Screenshare-Full-Screen.png?fm=webp&fit=fill&f=center&w=2176&h=",
+    "extra-large": "https://images.ctfassets.net/r6vlh4dr9f5y/2374430/1db8afb80c2d57801a89c5a94cdc9c1e/Screenshot_of_changing_the_video_background_in_Dialpad_Meetings.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+  },
+  "bottom-left": {
+    small: "https://images.ctfassets.net/r6vlh4dr9f5y/452H07Tf4a4Bgbualq68pE/68594803c196627615e7eb769cc33764/4.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+    medium: "https://images.ctfassets.net/r6vlh4dr9f5y/rLGBofYEGcQUTZN22vX1G/36572d816816b4725cda3f6dd9ef7e0d/A_video_conference_happening_in_Dialpads_desktop_app.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+    large: "https://images.ctfassets.net/r6vlh4dr9f5y/3854686/f8fd3faea55e8b930077320254e93a6a/Screenshare-Full-Screen.png?fm=webp&fit=fill&f=center&w=2176&h=",
+    "extra-large": "https://images.ctfassets.net/r6vlh4dr9f5y/2374430/1db8afb80c2d57801a89c5a94cdc9c1e/Screenshot_of_changing_the_video_background_in_Dialpad_Meetings.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+  },
+  "bottom-right": {
+    small: "https://images.ctfassets.net/r6vlh4dr9f5y/452H07Tf4a4Bgbualq68pE/68594803c196627615e7eb769cc33764/4.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+    medium: "https://images.ctfassets.net/r6vlh4dr9f5y/rLGBofYEGcQUTZN22vX1G/36572d816816b4725cda3f6dd9ef7e0d/A_video_conference_happening_in_Dialpads_desktop_app.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+    large: "https://images.ctfassets.net/r6vlh4dr9f5y/3854686/f8fd3faea55e8b930077320254e93a6a/Screenshare-Full-Screen.png?fm=webp&fit=fill&f=center&w=2176&h=",
+    "extra-large": "https://images.ctfassets.net/r6vlh4dr9f5y/2374430/1db8afb80c2d57801a89c5a94cdc9c1e/Screenshot_of_changing_the_video_background_in_Dialpad_Meetings.jpg?fm=webp&fit=fill&f=center&w=2176&h=",
+  },
+};
 
 
 export default function Settings() {
@@ -14,6 +42,9 @@ export default function Settings() {
   });
 
   const [message, setMessage] = useState(null);
+
+  const imageUrl = imageMap?.[formData.position]?.[formData.size];
+
 
   // Fetch Camera Settings
   const getCameraSettings = async () => {
@@ -172,14 +203,23 @@ export default function Settings() {
             >
               Loom Integration
             </div>
+            <div
+              className={`px-8 py-3 rounded-3xl cursor-pointer transition-all ${activePanel === "mail"
+                ? "bg-blue-700 text-white"
+                : "bg-transparent text-gray-700"
+                }`}
+              onClick={() => setActivePanel("mail")}
+            >
+              Mail configuration
+            </div>
           </div>
 
           <div>
             {activePanel === "User" && (
               <>
                 <div className="form flex flex-col pt-10 w-full">
-                
-               <form onSubmit={UserhandleSubmit} className="flex flex-col gap-2 ">
+
+                  <form onSubmit={UserhandleSubmit} className="flex flex-col gap-2 ">
                     <div className="flex flex-col items-start gap-1 text-md">
                       <label htmlFor="username" className="font-semibold w-40">User Name</label>
                       <input
@@ -236,72 +276,91 @@ export default function Settings() {
             {activePanel === "Loom" && (
               <>
                 <div className="form flex flex-col pt-10 relative z-20">
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                    {/* Camera Position */}
-                    <div className="flex flex-col items-start gap-2 text-xl">
-                      <label htmlFor="position" className="font-semibold w-40">
-                        Camera Position
-                      </label>
-                      <select
-                        id="position"
-                        name="position"
-                        value={formData.position}
-                        onChange={handleChange}
-                        className="border-2 border-blue-700 font-semibold rounded-3xl py-2 px-4 text-blue-700 focus:outline-none text-lg placeholder:font-semibold w-full"
-                        required
-                      >
-                        <option value="" disabled>
-                          Select a position
-                        </option>
-                        <option value="top-left">Top Left</option>
-                        <option value="top-right">Top Right</option>
-                        <option value="bottom-left">Bottom Left</option>
-                        <option value="bottom-right">Bottom Right</option>
-                      </select>
-                    </div>
-
-                    {/* Camera Size */}
-                    <div className="flex flex-col items-start gap-2 text-xl">
-                      <label htmlFor="size" className="font-semibold w-40">
-                        Camera Size
-                      </label>
-                      <select
-                        id="size"
-                        name="size"
-                        value={formData.size}
-                        onChange={handleChange}
-                        className="border-2 border-blue-700 font-semibold rounded-3xl py-2 px-4 text-blue-700 focus:outline-none text-lg placeholder:font-semibold w-full"
-                        required
-                      >
-                        <option value="" disabled>
-                          Select a size
-                        </option>
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
-                        <option value="extra-large">Extra Large</option>
-                      </select>
-                    </div>
-
-                    {/* Submit Button */}
-                    <div className="flex flex-col items-center justify-center mt-7">
-                      <button
-                        type="submit"
-                        className="px-20 py-3 bg-blue-500 text-white rounded-2xl flex items-center justify-center hover:bg-blue-600 cursor-pointer font-semibold"
-                      >
-                        Update Camera Settings
-                      </button>
-                    </div>
-
-                    {/* Message Display */}
-                    {message && (
-                      <div className={`text-${message.type === "success" ? "green" : "red"}-500 font-semibold mt-4`}>
-                        {message.text}
+                  <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
+                      {/* Camera Position */}
+                      <div className="flex flex-col items-start gap-2 text-xl">
+                        <label htmlFor="position" className="font-semibold w-40">
+                          Camera Position
+                        </label>
+                        <select
+                          id="position"
+                          name="position"
+                          value={formData.position}
+                          onChange={handleChange}
+                          className="border-2 border-blue-700 font-semibold rounded-3xl py-2 px-4 text-blue-700 focus:outline-none text-lg placeholder:font-semibold w-full"
+                          required
+                        >
+                          <option value="" disabled>
+                            Select a position
+                          </option>
+                          <option value="top-left">Top Left</option>
+                          <option value="top-right">Top Right</option>
+                          <option value="bottom-left">Bottom Left</option>
+                          <option value="bottom-right">Bottom Right</option>
+                        </select>
                       </div>
-                    )}
-                  </form>
+
+                      {/* Camera Size */}
+                      <div className="flex flex-col items-start gap-2 text-xl">
+                        <label htmlFor="size" className="font-semibold w-40">
+                          Camera Size
+                        </label>
+                        <select
+                          id="size"
+                          name="size"
+                          value={formData.size}
+                          onChange={handleChange}
+                          className="border-2 border-blue-700 font-semibold rounded-3xl py-2 px-4 text-blue-700 focus:outline-none text-lg placeholder:font-semibold w-full"
+                          required
+                        >
+                          <option value="" disabled>
+                            Select a size
+                          </option>
+                          <option value="small">Small</option>
+                          <option value="medium">Medium</option>
+                          <option value="large">Large</option>
+                          <option value="extra-large">Extra Large</option>
+                        </select>
+                      </div>
+
+                      {/* Submit Button */}
+                      <div className="flex flex-col items-center justify-center mt-7">
+                        <button
+                          type="submit"
+                          className="px-10 py-3 bg-blue-500 text-white rounded-2xl flex items-center justify-center hover:bg-blue-600 cursor-pointer font-semibold"
+                        >
+                          Update Camera Settings
+                        </button>
+                      </div>
+
+                      {/* Message Display */}
+                      {message && (
+                        <div className={`text-${message.type === "success" ? "green" : "red"}-500 font-semibold mt-4`}>
+                          {message.text}
+                        </div>
+                      )}
+                    </form>
+                    <div className="flex justify-center flex-col items-start w-full h-full">
+                      <span className="font-semibold text-blue-900 py-1">Preview</span>
+                      <div className="p-4 h-54 bg-gray-100 rounded shadow w-80">
+                        {imageUrl ? (
+                          <img src={imageUrl} alt="Selected" className="h-full w-full rounded-xl" />
+                        ) : (
+                          <p>No image available</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
+              </>
+            )}
+
+            {activePanel === "mail" && (
+              <>
+              <GoogleAuth/>
               </>
             )}
           </div>
