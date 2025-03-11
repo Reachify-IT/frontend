@@ -405,7 +405,7 @@ function PanelSectionCard() {
   };
   
 
-  const handleDownload = () => {
+const handleDownload = () => {
     const fileName = "demo.xlsx"; // Replace with your actual file name
     const fileUrl = `/demo_websites.xlsx`; // Relative path from the public folder
   
@@ -441,7 +441,7 @@ function PanelSectionCard() {
       <div className='flex items-center justify-center flex-col'>
         <>
           <div className='flex items-center mb-6 justify-start w-full'>
-            <div className="switchbutton mb-2 bg-blue-200 flex items-center justify-center gap-1 rounded-3xl ">
+            <div className="ml-20 switchbutton mb-2 bg-blue-200 flex items-center justify-center gap-1 rounded-3xl ">
               <div
                 className={`px-8 py-2 rounded-3xl cursor-pointer transition-all ${activePanel === "task" ? "bg-blue-700 text-white" : "bg-transparent text-gray-700"
                   }`}
@@ -468,16 +468,16 @@ function PanelSectionCard() {
                     <div className='flex flex-col gap-5 items-center justify-center'>
                       <div className="fisrt flex flex-col sm:flex-row w-full justify-between gap-5">
 
-                        <div className="bg-blue-100 aspect-square w-full flex items-center justify-between gap-5 flex-col py-14 rounded-3xl">
+                        <div className="bg-blue-100 aspect-square w-full flex items-center justify-between gap-5 flex-col py-9 rounded-3xl">
                           <h1 className="text-center font-normal text-2xl capitalize">Initiate Bulk video creation</h1>
                           {(fileCamRecord !== "Upload your pre-recorded video" && fileName !== "Upload CSV to Start Task") ? (
                             <button
                               onClick={handleStart}
-                              className="bg-blue-700 px-12 py-4 text-white rounded-3xl flex items-center gap-2 hover:bg-blue-800 disabled:bg-blue-400 cursor-pointer"
+                              className="bg-blue-700 px-10 py-3 text-white rounded-3xl flex items-center gap-2 hover:bg-blue-800 disabled:bg-blue-400 cursor-pointer"
                               disabled={loading}
                             >
                               {loading ? (<ImSpinner2 className="animate-spin text-white text-lg" />) : (
-                                <> <FaPlay /> Start </>)}
+                                <div className='uppercase flex items-center gap-1 font-semibold '> <FaPlay /> Start </div>)}
                             </button>
 
                           ) : (<>
@@ -485,13 +485,13 @@ function PanelSectionCard() {
                           </>)}
                         </div>
 
-                        <div className="relative z-10 bg-blue-100 aspect-square w-full flex items-center justify-between gap-5 flex-col py-14 rounded-3xl">
-                          <h1 className="text-center font-normal text-2xl capitalize">Abort  current task</h1>
+                        <div className="relative z-10 bg-blue-100 aspect-square w-full flex items-center justify-between gap-5 flex-col py-9 rounded-3xl">
+                          <h1 className="text-center font-normal text-2xl capitalize">Abort  current <br/>task</h1>
                           {(fileCamRecord !== "Upload your pre-recorded video" && fileName !== "Upload CSV to Start Task") ? (
-                            <button onClick={handleStop} className="bg-blue-700 px-12 py-4 text-white rounded-3xl flex items-center gap-2 hover:bg-blue-800 cursor-pointer" disabled={StopLoading}
+                            <button onClick={handleStop} className="bg-blue-700 px-10 py-3 text-white rounded-3xl flex items-center gap-2 hover:bg-blue-800 cursor-pointer" disabled={StopLoading}
                             >
                               {StopLoading ? (<>Aborting...<ImSpinner2 className="animate-spin text-white text-lg" /></>) : (
-                                <> <FaPlay /> Stop </>)}</button>
+                                <div className='uppercase flex items-center gap-1 font-semibold '> <FaPlay /> Stop </div>)}</button>
                           ) : (<>
                             <button className="bg-blue-100 px-6 py-4 text-wrap text-gray-700 rounded-3xl flex items-center gap-2 " disabled>Upload files, first</button>
                           </>)}

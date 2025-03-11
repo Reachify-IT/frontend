@@ -98,7 +98,7 @@ function FeedbackForm() {
 
         {/* Name Field */}
         <div className="flex flex-col">
-          <label htmlFor="name" className="font-semibold">Name</label>
+          <label htmlFor="name" className="font-semibold pl-5">Name</label>
           <input
             type="text"
             id="name"
@@ -113,7 +113,7 @@ function FeedbackForm() {
 
         {/* Email Field */}
         <div className="flex flex-col">
-          <label htmlFor="email" className="font-semibold">Email</label>
+          <label htmlFor="email" className="font-semibold pl-5">Email</label>
           <input
             type="email"
             id="email"
@@ -128,7 +128,7 @@ function FeedbackForm() {
 
         {/* Description Field */}
         <div className="flex flex-col">
-          <label htmlFor="description" className="font-semibold">Description</label>
+          <label htmlFor="description" className="font-semibold pl-5">Description</label>
           <textarea
             id="description"
             name="description"

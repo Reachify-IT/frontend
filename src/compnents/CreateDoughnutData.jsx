@@ -26,9 +26,9 @@ const data = {
   datasets: [
     {
       data: [60, 40],
-      backgroundColor: ["rgb(255, 5, 5)", "rgb(0, 123, 255)"],
+      backgroundColor: ["rgb(0, 102, 204)", "rgb(0, 153, 255)", "rgb(51, 153, 255)", "rgb(102, 204, 255)", "rgb(0, 123, 255)"],
       borderWidth: 0,
-      radius: '70%'   
+      radius: '80%'   
     },
   ],
 };

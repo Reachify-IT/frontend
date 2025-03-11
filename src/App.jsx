@@ -78,6 +78,8 @@ function App() {
     socketService.listen("notification", (data) => {
       dispatch(addNotification(data.message));
 
+      console.log("New Notification:", data.message);
+
       if (Notification.permission === "granted") {
         new Notification("New Notification", { body: data.message });
       }

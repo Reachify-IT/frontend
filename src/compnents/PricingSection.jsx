@@ -98,14 +98,12 @@ const PricingSection = () => {
           return (
             <div
               key={plan.id}
-              className={`card w-64 px-7 py-5 rounded-2xl transition duration-300 ${
-                isActive ? "bg-blue-200 border-4 border-blue-700 "  : "bg-blue-100 opacity-50"
-              }`}
+              className={"card w-64 px-7 py-5 rounded-2xl transition duration-300 bg-[#d0ddf570] "}
             >
-              <div className="card-img h-16 w-16 flex items-center justify-center">{plan.icon}</div>
+              <div className="card-img h-16 w-16 flex items-center justify-center text-blue-500">{plan.icon}</div>
               <div className="flex flex-col gap-2 mt-4">
                 <h1 className="text-2xl font-bold">{plan.name}</h1>
-                <h2 className="text-2xl font-bold text-red-500">${plan.price}</h2>
+                <h2 className="text-2xl font-bold text-blue-500">${plan.price}</h2>
                 <p className="text-center text-lg">For Solo Professionals</p>
               </div>
               <div className="border-t p-5 mt-2">

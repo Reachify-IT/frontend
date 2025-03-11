@@ -14,6 +14,7 @@ import PanelSectionCard from "../compnents/PanelSectionCard";
 import Notifications from "../compnents/Notifications ";
 import { useSelector } from "react-redux";
 import PricingSection from "../compnents/PricingSection";
+import { GrHomeRounded } from "react-icons/gr";
 
 
 export function HomePage() {
@@ -35,7 +36,7 @@ export function HomePage() {
                         {/* Main Navigation */}
                         <div className="navWrapper w-12 px-1 rounded-full flex flex-col gap-3 items-center bg-blue-100 ">
                             {[
-                                { icon: TbSmartHome, name: "home" },
+                                { icon: GrHomeRounded, name: "home" },
                                 { icon: LuLayoutDashboard, name: "dashboard" },
                                 { icon: CiMobile3, name: "mobile" }
                             ].map(({ icon: Icon, name }, index) => (
@@ -74,7 +75,7 @@ export function HomePage() {
 
 
                         {/* Preview Section */}
-                        <div className="navWrapper w-12 px-1 rounded-full flex flex-col gap-6 items-center bg-blue-100 ">
+                        <div className="navWrapper mt-10 w-12 px-1 rounded-full flex flex-col gap-6 items-center bg-blue-100 ">
                             <div
                                 onClick={() => setActiveSection("preview")}
                                 className={`flex items-center justify-center h-12 w-12 rounded-full text-gray-600 cursor-pointer transition-all duration-300 
@@ -103,14 +104,18 @@ export function HomePage() {
                                     </div>
                                     {/* Pie Charts */}
                                     <div className="flex flex-col w-full lg:w-[40%]  h-auto gap-4 relative z-50">
-                                        {[...Array(2)].map((_, i) => (
-                                            <div key={i} className="flex flex-col sm:flex-row w-full bg-blue-200 rounded-3xl px-2 items-center justify-center">
+                                            <div  className="flex flex-col sm:flex-row w-full bg-blue-200 rounded-3xl px-2 items-center justify-center">
                                                 <h1 className="text-nowrap font-semibold text-gray-700 text-2xl">
-                                                    Limited Used
+                                                    Limit Used
                                                 </h1>
                                                 <CreateDoughnutData />
                                             </div>
-                                        ))}
+                                            <div  className="flex flex-col sm:flex-row w-full bg-blue-200 rounded-3xl px-2 items-center justify-center">
+                                                <h1 className="text-nowrap font-semibold text-gray-700 text-2xl">
+                                                    Open Rate
+                                                </h1>
+                                                <CreateDoughnutData />
+                                            </div>
                                     </div>
                                 </div>
                             </>
