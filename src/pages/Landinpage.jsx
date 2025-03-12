@@ -24,6 +24,8 @@ import { IoClose } from "react-icons/io5"; // Close icon
 import { GoGraph } from "react-icons/go";
 import getImage from "../assets/cardImage.svg"
 import { MdOutlineArrowRight } from "react-icons/md";
+import step2IMg from "../assets/startprocess.svg"
+import step3IMg from "../assets/csvupload.svg"
 
 export default function Landinpage() {
     const [activeStep, setActiveStep] = useState("one");
@@ -244,23 +246,14 @@ export default function Landinpage() {
                                 )}
                                 {activeStep === "two" && (
                                     <> <div className="bg-blue-50 p-8 rounded-2xl shadow-lg flex flex-col items-center w-full">
-                                        <div className="bg-white p-6 shadow-lg rounded-full border-5 border-gray-700 ">
-                                            <FaFileCsv className="text-gray-900 text-8xl" />
-                                        </div>
-                                        <p className="text-lg text-blue-900 font-semibold mt-4">Upload Your CSV file</p>
-                                        <button className="mt-4 px-6 py-2 bg-[#025cff] text-white rounded-lg flex items-center gap-2 hover:text-neutral-300 cursor-pointer">
-                                            <FaUpload /> Upload
-                                        </button>
+                                        <img src={step2IMg} alt="" />
                                     </div>
 
                                     </>
                                 )}
                                 {activeStep === "three" && (
-                                    <div className="p-4 bg-violet-400 text-white rounded-lg w-full text-center">
-                                        <h1 className="text-lg font-bold text-blue-900">AI-Generated Email Outreach</h1>
-                                        <p className="text-sm text-gray-700">
-                                            Loomify writes and sends personalized emails based on the video and the website content.
-                                        </p>
+                                    <div className="p-4 bg-blue-50 text-white rounded-lg w-full text-center">
+                                       <img src={step3IMg} alt="" />
                                     </div>
                                 )}
                             </div>

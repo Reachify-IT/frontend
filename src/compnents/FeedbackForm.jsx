@@ -90,13 +90,12 @@ function FeedbackForm() {
 
   return (
     <div className="flex justify-center items-center">
-      <form
+      {/* <form
         onSubmit={handleSubmit}
         className="rounded-2xl p-6 w-[400px] space-y-4"
       >
         <h2 className="text-2xl font-bold text-center text-blue-700">Feedback Form</h2>
 
-        {/* Name Field */}
         <div className="flex flex-col">
           <label htmlFor="name" className="font-semibold pl-5">Name</label>
           <input
@@ -111,7 +110,6 @@ function FeedbackForm() {
           />
         </div>
 
-        {/* Email Field */}
         <div className="flex flex-col">
           <label htmlFor="email" className="font-semibold pl-5">Email</label>
           <input
@@ -126,7 +124,6 @@ function FeedbackForm() {
           />
         </div>
 
-        {/* Description Field */}
         <div className="flex flex-col">
           <label htmlFor="description" className="font-semibold pl-5">Description</label>
           <textarea
@@ -141,7 +138,6 @@ function FeedbackForm() {
           />
         </div>
 
-        {/* Star Rating */}
         <div className="flex items-center justify-center gap-10">
           <label className="font-semibold">Rating:</label>
           <div className="flex gap-2">
@@ -159,7 +155,6 @@ function FeedbackForm() {
           </div>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-blue-700 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition-all cursor-pointer disabled:opacity-50"
@@ -167,7 +162,11 @@ function FeedbackForm() {
         >
           {loading ? "Submitting..." : "Submit Feedback"}
         </button>
-      </form>
+      </form> */}
+      <div>
+      {/* <iframe aria-label='Feedback Form' frameborder="0" className="h-[600px] w-[700px]" src='https://forms.zohopublic.in/reachifyinnovationspvtltd1/form/FeedbackForm/formperma/igY_vZz-biQuPJs_MBtMisojuF-lFXYXvQsAtQLaUDI'></iframe> */}
+      <iframe aria-label='Feedback Form' frameborder="0" className="h-[500px] w-[900px]"src='https://forms.zohopublic.in/reachifyinnovationspvtltd1/form/FeedbackForm/formperma/igY_vZz-biQuPJs_MBtMisojuF-lFXYXvQsAtQLaUDI'></iframe>
+      </div>
     </div>
   );
 }
