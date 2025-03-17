@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate,Navigate  } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Footer from "./compnents/Footer";
@@ -29,6 +29,8 @@ function Layout() {
   const dispatch = useDispatch();
   const isLandingPage = location.pathname === "/";
 
+  const token = localStorage.getItem("accessToken");
+
   useEffect(() => {
     const checkTokenExpiration = () => {
       const expiresAt = localStorage.getItem("tokenExpiry");
@@ -55,10 +57,13 @@ function Layout() {
         <Route path="/" element={<Landinpage />} />
         <Route path="/Welcome" element={<WelcomePage />} />
         <Route path="/email-page" element={<BulkEmailForm />} />
-        <Route path="/login" element={<LoginPage />} />
+
+
+        <Route path="/login" element={token ? <Navigate to="/home" replace /> : <LoginPage />} />
+
         <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/imap-config" element={<ImapConfig />} />
-        <Route path="/payment-status" element={<PaymentStatus />} />
+        <Route path="/imap-config" element={<ProtectedRoute element={ <ImapConfig />}  />} />
+        <Route path="/payment-status" element={<ProtectedRoute element={  <PaymentStatus /> } />} />
         <Route path="/home" element={<ProtectedRoute element={<HomePage />} />} />
         <Route path="/forget-password" element={<ForgetPass />} />
       </Routes>
@@ -67,6 +72,7 @@ function Layout() {
     </>
   );
 }
+
 
 function App() {
   const dispatch = useDispatch();
@@ -92,7 +98,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Layout /> {/* ✅ Now `useNavigate()` is inside <BrowserRouter> */}
+      <Layout />
     </BrowserRouter>
   );
 }

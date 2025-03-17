@@ -113,7 +113,7 @@ function PanelSectionCard() {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", file);
-
+    const token = localStorage.getItem("accessToken");
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BackendURL}/api/excel/upload-cam-video`,
@@ -121,6 +121,7 @@ function PanelSectionCard() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `${token}`,
           },
         }
       );
@@ -153,6 +154,7 @@ function PanelSectionCard() {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", file);
+    const token = localStorage.getItem("accessToken");
 
     try {
       const response = await axios.post(
@@ -161,6 +163,7 @@ function PanelSectionCard() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `${token}`,
           },
         }
       );
@@ -194,10 +197,10 @@ function PanelSectionCard() {
   const [videos, setVideos] = useState([]);
   const [error, setError] = useState(null);
 
-  
+
   const fetchAllProcessedVideos = async () => {
     const token = localStorage.getItem("accessToken");
-  
+
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BackendURL}/api/excel/all-videos`,
@@ -208,9 +211,9 @@ function PanelSectionCard() {
           },
         }
       );
-  
+
       setVideos(response.data); // Store data in state
-      toast.success("✅ Processed videos fetched successfully!", {
+      toast.success("Processed videos fetched successfully!", {
         position: "top-right",
         autoClose: 3000, // Closes after 3 seconds
       });
@@ -225,7 +228,7 @@ function PanelSectionCard() {
       setLoading(false);
     }
   };
-  
+
 
   const isFetched = useRef(false); // ✅ Track fetch status
 
@@ -235,26 +238,37 @@ function PanelSectionCard() {
       isFetched.current = true; // Prevent re-fetch
     }
   }, []);
-  
 
 
+  let isStart = false; // Track the task state globally
 
   const handleStart = async () => {
     if (!fileInputRef.current.files[0] || !fileInputRefRecord.current.files[0]) {
       toast.error("Please upload both the CSV and recorded video before starting the task.", {
-        position: "bottom-right",
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        icon: <FaCheckCircle className="text-blue-500 h-16 w-16" />,
-        theme: "light",
+      });
+      return;
+    }
+
+    if (isStart) { // Prevent starting if task is already in progress
+      toast.error("The task has already started.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
       return;
     }
 
     setLoading(true);
+    isStart = true; // Task has started
     const token = localStorage.getItem("accessToken");
 
     try {
@@ -274,7 +288,7 @@ function PanelSectionCard() {
         }
       );
 
-      toast.info("video's Processing Completed Successfully!", {
+      toast.info("Video's processing completed successfully!", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -288,10 +302,8 @@ function PanelSectionCard() {
       setFileName("Upload CSV to Start Task");
       setfileCamRecord("Upload your pre-recorded video");
 
-
       console.log(response.data);
     } catch (error) {
-
       // Show error toast
       toast.error(error.response.data.error, {
         position: "top-right",
@@ -311,11 +323,23 @@ function PanelSectionCard() {
   };
 
   const handleStop = async () => {
+    if (!isStart) { // Only allow stopping if task is running
+      toast.error("Please start the task before stopping it.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+
     const token = localStorage.getItem("accessToken");
     setStopLoading(true);
 
     try {
-      // Start processing only if uploads succeed
+      // Terminate the process
       const response = await axios.post(
         `${import.meta.env.VITE_BackendURL}/api/excel/terminate`,
         {},
@@ -327,7 +351,7 @@ function PanelSectionCard() {
         }
       );
 
-      toast.info("Task stop successfully!", {
+      toast.info("Task stopped successfully!", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -337,11 +361,12 @@ function PanelSectionCard() {
         icon: <FaCheckCircle className="text-blue-500 h-16 w-16" />,
         theme: "light",
       });
+
       console.log(response.data);
       setFileName("Upload CSV to Start Task");
       setfileCamRecord("Upload your pre-recorded video");
     } catch (error) {
-      toast.error("Task start failed!", {
+      toast.error("Task stop failed!", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -350,13 +375,15 @@ function PanelSectionCard() {
         draggable: true,
         theme: "colored",
       });
-      console.error("Error starting task:", error);
+      console.error("Error stopping task:", error);
     } finally {
       setStopLoading(false);
       handleRemoveFileRecord();
       handleRemoveFile();
+      isStart = false; // Reset task state to allow restart
     }
   };
+
 
 
 
@@ -400,15 +427,15 @@ function PanelSectionCard() {
       document.body.removeChild(textArea);
       setCopied(true);
     }
-  
+
     setTimeout(() => setCopied(false), 2000);
   };
-  
 
-const handleDownload = () => {
+
+  const handleDownload = () => {
     const fileName = "demo.xlsx"; // Replace with your actual file name
     const fileUrl = `/demo_websites.xlsx`; // Relative path from the public folder
-  
+
     try {
       // Create an anchor element
       const link = document.createElement("a");
@@ -417,7 +444,7 @@ const handleDownload = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-  
+
       // ✅ Show success toast notification
       toast.success("✅ File downloaded successfully!", {
         position: "top-right",
@@ -425,7 +452,7 @@ const handleDownload = () => {
       });
     } catch (error) {
       console.error("❌ File download error:", error);
-  
+
       // ❌ Show error toast notification
       toast.error("❌ Failed to download file!", {
         position: "top-right",
@@ -433,8 +460,8 @@ const handleDownload = () => {
       });
     }
   };
-  
-  
+
+
 
   return (
     <>
@@ -470,31 +497,23 @@ const handleDownload = () => {
 
                         <div className="bg-blue-100 aspect-square w-full flex items-center justify-between gap-5 flex-col py-9 rounded-3xl">
                           <h1 className="text-center font-normal text-2xl capitalize">Initiate Bulk video creation</h1>
-                          {(fileCamRecord !== "Upload your pre-recorded video" && fileName !== "Upload CSV to Start Task") ? (
-                            <button
-                              onClick={handleStart}
-                              className="bg-blue-700 px-10 py-3 text-white rounded-3xl flex items-center gap-2 hover:bg-blue-800 disabled:bg-blue-400 cursor-pointer"
-                              disabled={loading}
-                            >
-                              {loading ? (<ImSpinner2 className="animate-spin text-white text-lg" />) : (
-                                <div className='uppercase flex items-center gap-1 font-semibold '> <FaPlay /> Start </div>)}
-                            </button>
 
-                          ) : (<>
-                            <button className="bg-blue-100 px-6 py-4 text-wrap text-gray-700 rounded-3xl flex items-center gap-2 " disabled>Upload files, first</button>
-                          </>)}
+                          <button
+                            onClick={handleStart}
+                            className="bg-blue-700 px-10 py-3 text-white rounded-3xl flex items-center gap-2 hover:bg-blue-800 disabled:bg-blue-400 cursor-pointer"
+                            disabled={loading}
+                          >
+                            {loading ? (<>Creating...<ImSpinner2 className="animate-spin text-white text-lg" /></>) : (
+                              <div className='uppercase flex items-center gap-1 font-semibold '> <FaPlay /> Start </div>)}</button>
                         </div>
 
                         <div className="relative z-10 bg-blue-100 aspect-square w-full flex items-center justify-between gap-5 flex-col py-9 rounded-3xl">
-                          <h1 className="text-center font-normal text-2xl capitalize">Abort  current <br/>task</h1>
-                          {(fileCamRecord !== "Upload your pre-recorded video" && fileName !== "Upload CSV to Start Task") ? (
-                            <button onClick={handleStop} className="bg-blue-700 px-10 py-3 text-white rounded-3xl flex items-center gap-2 hover:bg-blue-800 cursor-pointer" disabled={StopLoading}
-                            >
-                              {StopLoading ? (<>Aborting...<ImSpinner2 className="animate-spin text-white text-lg" /></>) : (
-                                <div className='uppercase flex items-center gap-1 font-semibold '> <FaPlay /> Stop </div>)}</button>
-                          ) : (<>
-                            <button className="bg-blue-100 px-6 py-4 text-wrap text-gray-700 rounded-3xl flex items-center gap-2 " disabled>Upload files, first</button>
-                          </>)}
+                          <h1 className="text-center font-normal text-2xl capitalize">Abort  current <br />task</h1>
+
+                          <button onClick={handleStop} className="bg-blue-700 px-10 py-3 text-white rounded-3xl flex items-center gap-2 hover:bg-blue-800 cursor-pointer" disabled={StopLoading}
+                          >
+                            {StopLoading ? (<>Aborting...<ImSpinner2 className="animate-spin text-white text-lg" /></>) : (
+                              <div className='uppercase flex items-center gap-1 font-semibold '> <FaPlay /> Stop </div>)}</button>
                         </div>
                       </div>
 

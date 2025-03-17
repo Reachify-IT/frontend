@@ -46,7 +46,7 @@ export function HomePage() {
                                     className={`flex items-center justify-center h-12 w-12 rounded-full text-gray-600  cursor-pointer transition-all duration-300 
                 ${activeSection === name ? "bg-blue-700 text-white" : "hover:bg-blue-700 hover:text-white"}`}
                                 >
-                                    <Icon className="text-3xl " />
+                                    <Icon className="text-2xl " />
                                 </div>
                             ))}
                         </div>

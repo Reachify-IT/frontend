@@ -6,6 +6,7 @@ const ImapConfig = () => {
     const nevigate = useNavigate();
     const [step, setStep] = useState(1);
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -26,6 +27,7 @@ const ImapConfig = () => {
             setMessage("All fields are required aa.");
             return;
         }
+        setLoading(true);
 
         try {
             const token = localStorage.getItem("accessToken");
@@ -55,42 +57,67 @@ const ImapConfig = () => {
             console.error("IMAP Configuration Error:", error);
             setMessage("An unexpected error occurred. Please try again.");
         }
+        finally {
+            setLoading(false);
+        }
     };
 
 
 
     const handleSubmit = async (e) => {
-
-        if (formData.smtpPort === 0 || formData.imapPort === 0 || !formData.email || !formData.password || !formData.imapHost || !formData.smtpHost || !formData.replyTo) {
-            setMessage("All fields are required.");
-            setMessage("Please enter valid port numbers.");
+        e.preventDefault(); // Prevent default form submission
+    
+        if (
+            formData.smtpPort === 0 ||
+            formData.imapPort === 0 ||
+            !formData.email ||
+            !formData.password ||
+            !formData.imapHost ||
+            !formData.smtpHost ||
+            !formData.replyTo
+        ) {
+            setMessage("All fields are required and port numbers must be valid.");
             return;
         }
-
-        e.preventDefault();
+    
         const token = localStorage.getItem("accessToken");
-
+        setLoading(true);
+    
         try {
-            const response = await axios.post(`${import.meta.env.VITE_BackendURL}/api/imap/imap-config`, {  
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${token}`,
-                },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
+            const response = await axios.post(
+                `${import.meta.env.VITE_BackendURL}/api/imap/imap-config`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `${token}`,
+                    },
+                }
+            );
+    
+            const data = response.data; // Axios already parses JSON
+            console.log("IMAP Configuration Response:", response);
+    
+            if (data.success) {
                 setMessage(data.message || "IMAP Configuration Saved Successfully.");
-                nevigate("/home");
+                nevigate("/home"); // Ensure navigate is correctly defined
             } else {
                 setMessage(data.message || "Failed to configure IMAP. Please check your inputs.");
             }
         } catch (error) {
             console.error("IMAP Configuration Error:", error);
-            setMessage("An unexpected error occurred. Please try again.");
+            
+            if (error.response) {
+                setMessage(error.response.data.message || "An error occurred. Please check your inputs.");
+            } else if (error.request) {
+                setMessage("No response received from the server. Please try again later.");
+            } else {
+                setMessage("An unexpected error occurred. Please try again.");
+            }
+        } finally {
+            setLoading(false);
         }
+    
         setFormData({
             email: "",
             password: "",
@@ -101,6 +128,8 @@ const ImapConfig = () => {
             replyTo: "",
         });
     };
+    
+    
 
 
     return (
@@ -130,7 +159,7 @@ const ImapConfig = () => {
                         </div>
 
                         <div className="flex justify-end mt-4">
-                            <button type="button" onClick={handleVerify} className="px-4 py-2 bg-blue-500 text-white rounded-md">Next</button>
+                            <button type="button" onClick={handleVerify} className="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-md">{loading ? "Verifying..." : "Verify"}</button>
                         </div>
                     </>
                 )}
@@ -154,8 +183,8 @@ const ImapConfig = () => {
                             <input type="email" name="replyTo" placeholder="Enter reply-to email" required onChange={handleChange} className="px-4 py-2 border rounded-md" />
                         </div>
                         <div className="flex justify-between mt-4">
-                            <button type="button" onClick={() => setStep(1)} className="px-4 py-2 bg-gray-500 text-white rounded-md">Back</button>
-                            <button type="submit" onClick={handleSubmit} className="px-4 py-2 bg-green-500 text-white rounded-md">Submit</button>
+                            <button type="button" onClick={() => setStep(1)} className="px-4 py-2 bg-gray-500 text-white rounded-md cursor-pointer">Back</button>
+                            <button type="submit" onClick={handleSubmit} className="px-4 py-2 bg-green-500 text-white rounded-md cursor-pointer">{loading ? "Submiting..." : "Submit"}</button>
                         </div>
                     </div>
                 )}

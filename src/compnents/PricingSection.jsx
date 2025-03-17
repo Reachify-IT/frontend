@@ -94,7 +94,7 @@ const PricingSection = () => {
     <div>
       <div className="flex flex-wrap items-center justify-center gap-10 relative z-50 mt-5">
         {plans.map((plan) => {
-          const isActive = user?.planDetails === plan.name;
+          const isActive = user?.planDetails === plan.name ;
           return (
             <div
               key={plan.id}
@@ -116,7 +116,6 @@ const PricingSection = () => {
                 <button
                   className="bg-blue-700 text-sm px-7 py-3 flex items-center justify-center text-white font-semibold rounded-2xl cursor-pointer hover:bg-blue-800"
                   onClick={() => handlePaymentInitiate(plan)}
-                  disabled={user?.planDetails}
                 >
                   {isActive ? "Current Plan" : "Start 3-day FREE trial"}
                 </button>

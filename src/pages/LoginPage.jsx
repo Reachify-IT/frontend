@@ -147,6 +147,12 @@ function LoginPage() {
                   &#40;Forgot Password? <span className="text-red-500">Reset Here</span> &#41;
                 </span>
               </Link>
+              <Link to="/sign-up" className="mt-4">
+                <span>
+                  Don&apos;t have an account?{" "}
+                  <span className="text-blue-500">Sign Up</span>
+                </span>
+              </Link>
             </div>
           </form>
         </div>

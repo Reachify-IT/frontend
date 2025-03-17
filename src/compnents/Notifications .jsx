@@ -14,7 +14,7 @@ export default function Notifications() {
             .map((notification, index) => (
               <div key={index} className="flex items-center bg-blue-50 py-3 rounded px-5 shadow-md">
                 <div className="px-4">
-                  <h1 className="text-xl font-normal font-mono">{notification}</h1>
+                  <h1 className="text-md font-normal subheading">{notification}</h1>
                 </div>
               </div>
             ))
