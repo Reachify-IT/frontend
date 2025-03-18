@@ -1,6 +1,6 @@
 FROM node:alpine3.18 as build
 
-# Declare build time environment variabless
+# Declare build time environment variables
 ARG VITE_BackendURL
 # et
 # Build App
