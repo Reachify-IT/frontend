@@ -3,6 +3,8 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import GoogleAuth from "./GoogleAuth";
+import VideoPreference from "./VideoPreference";
+import Loader from "./Loader";
 
 const imageMap = {
   "top-left": {
@@ -35,6 +37,7 @@ const imageMap = {
 export default function Settings() {
   const [activePanel, setActivePanel] = useState("User");
   const [showPassword, setShowPassword] = useState(false);
+  const [isloading, setIsloading] = useState(false);
 
   const [formData, setFormData] = useState({
     position: "",
@@ -48,6 +51,7 @@ export default function Settings() {
 
   // Fetch Camera Settings
   const getCameraSettings = async () => {
+    setIsloading(true);
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -71,6 +75,9 @@ export default function Settings() {
       console.error("Error fetching camera settings:", error);
       setMessage({ type: "error", text: "Failed to fetch camera settings" });
       return null;
+    }
+    finally {
+      setIsloading(false);
     }
   };
 
@@ -125,6 +132,7 @@ export default function Settings() {
 
   // Fetch user data when component mounts
   const fetchUserInfo = async () => {
+    setIsloading(true);
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("No access token found");
@@ -144,6 +152,9 @@ export default function Settings() {
       console.error("Error fetching user info:", error);
       setuserMessage({ type: "error", text: "Failed to fetch user info" });
     }
+    finally {
+      setIsloading(false);
+    }
   };
 
   useEffect(() => {
@@ -157,7 +168,9 @@ export default function Settings() {
 
   // Handle form submission (Update User Info)
   const UserhandleSubmit = async (e) => {
+
     e.preventDefault();
+    setIsloading(true);
 
     try {
       const token = localStorage.getItem("accessToken");
@@ -173,6 +186,9 @@ export default function Settings() {
       console.error("Error updating user info:", error);
       setuserMessage({ type: "error", text: "Failed to update user info" });
     }
+    finally {
+      setIsloading(false);
+    }
   };
 
 
@@ -181,7 +197,7 @@ export default function Settings() {
 
   return (
     <>
-
+      {isloading && <Loader />}
       <div className="flex items-center justify-start flex-col">
         <div className="top-bar flex items-center justify-start flex-col">
           <div className="relative z-10 switchbutton bg-blue-200 inline-flex items-center justify-center gap-1 rounded-3xl">
@@ -193,6 +209,13 @@ export default function Settings() {
               onClick={() => setActivePanel("User")}
             >
               User Settings
+            </div>
+
+            <div
+              className={`px-8 py-3 rounded-3xl cursor-pointer transition-all ${activePanel === "videoPreference" ? "bg-blue-700 text-white" : "bg-transparent text-gray-700"}`}
+              onClick={() => setActivePanel("videoPreference")}
+            >
+              Video Preferences
             </div>
             <div
               className={`px-8 py-3 rounded-3xl cursor-pointer transition-all ${activePanel === "Loom"
@@ -212,7 +235,11 @@ export default function Settings() {
             >
               Mail configuration
             </div>
+
+
           </div>
+
+
 
           <div>
             {activePanel === "User" && (
@@ -360,9 +387,18 @@ export default function Settings() {
 
             {activePanel === "mail" && (
               <>
-              <GoogleAuth/>
+                <GoogleAuth />
               </>
             )}
+
+            {activePanel === "videoPreference" && (
+              <>
+                <div className="form flex flex-col pt-10 relative z-20">
+                  <VideoPreference />
+                </div>
+              </>
+            )}
+
           </div>
         </div>
       </div>

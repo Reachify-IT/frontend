@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useLocation, useNavigate,Navigate  } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate, Navigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Footer from "./compnents/Footer";
@@ -7,7 +7,6 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import WelcomePage from "./pages/WelcomePage";
 import { HomePage } from "./pages/HomePage";
-import ForgetPass from "./pages/ForgetPass";
 import Landinpage from "./pages/Landinpage";
 import { ToastContainer } from "react-toastify";
 
@@ -22,12 +21,19 @@ import { logout } from "../features/userSlice";
 import ProtectedRoute from "./compnents/ProtectedRoute";
 import BulkEmailForm from "./compnents/EmailForm";
 import ImapConfig from "./compnents/ImapConfig";
+import FolderData from "./compnents/FolderData";
+import NotFound from "./compnents/NotFound";
+import ResetPass from "./pages/ResetPass";
+import ForgotPassword from "./pages/ForgetPassword";
+import PrivacyPolicy from "./compnents/PrivacyPolicy";
+import TermAndConditions from "./compnents/TermAnd Conditions";
+import RefundPolicy from "./compnents/RefundPolicy";
 
 function Layout() {
   const location = useLocation();
   const navigate = useNavigate(); // ✅ Use inside <BrowserRouter>
   const dispatch = useDispatch();
-  const isLandingPage = location.pathname === "/";
+  const isLandingPage = location.pathname === "/" || location.pathname === "/privacy-policy" || location.pathname === "/terms-and-conditions" || location.pathname === "/refunds-policy";
 
   const token = localStorage.getItem("accessToken");
 
@@ -62,10 +68,22 @@ function Layout() {
         <Route path="/login" element={token ? <Navigate to="/home" replace /> : <LoginPage />} />
 
         <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/imap-config" element={<ProtectedRoute element={ <ImapConfig />}  />} />
-        <Route path="/payment-status" element={<ProtectedRoute element={  <PaymentStatus /> } />} />
+        <Route path="/imap-config" element={<ProtectedRoute element={<ImapConfig />} />} />
+        <Route path="/payment-status" element={<ProtectedRoute element={<PaymentStatus />} />} />
+        <Route path="/folder-data/:id" element={<ProtectedRoute element={<FolderData />} />} />
         <Route path="/home" element={<ProtectedRoute element={<HomePage />} />} />
-        <Route path="/forget-password" element={<ForgetPass />} />
+
+        <Route path="/forgot-password" element={token ? <Navigate to="/home" replace /> : <ForgotPassword />} />
+        <Route path="/reset-password/:token" element={token ? <Navigate to="/home" replace /> : <ResetPass />} />
+
+
+
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermAndConditions />} />
+        <Route path="/refunds-policy" element={<RefundPolicy />} />
+
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
       {!isLandingPage && <Footer />}
       <ToastContainer position="top-right" autoClose={3000} />
@@ -76,7 +94,7 @@ function Layout() {
 
 function App() {
   const dispatch = useDispatch();
-  const {user} = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
     socketService.connect(user?._id);

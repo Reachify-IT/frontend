@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FaPlay, FaPlayCircle, FaCopy } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
-import { FaPen } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import { FaEye } from "react-icons/fa";
-import { RxCross2 } from "react-icons/rx";
+
 import { IoClose } from "react-icons/io5";
 import axios from 'axios';
 import { ImSpinner2 } from "react-icons/im";
 import { toast } from "react-toastify";
 import { FaCheckCircle } from "react-icons/fa";
 import { AiOutlineDownload } from "react-icons/ai";
+import FileUpload from './FileUpload';
+import Loader from './Loader';
+import DataPanel from './DataPanel';
 
 
 
@@ -69,9 +69,8 @@ function PanelSectionCard() {
   const [activePanel, setActivePanel] = useState("task");
 
   const [notifications, setNotifications] = useState(data);
-  const [selectedNotification, setSelectedNotification] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
+  
+  const [isStart, setIsStart] = useState(false);
 
   const [fileName, setFileName] = useState("Upload CSV to Start Task");
   const [fileCamRecord, setfileCamRecord] = useState("Upload your pre-recorded video");
@@ -80,7 +79,8 @@ function PanelSectionCard() {
 
   const [loading, setLoading] = useState(false);
   const [StopLoading, setStopLoading] = useState(false);
-
+  const [showFileManager, setShowFileManager] = useState(false);
+  const [selectedFolder, setSelectedFolder] = useState({ id: "", name: "" });
 
 
 
@@ -179,8 +179,11 @@ function PanelSectionCard() {
       });
       console.log(response.data);
     } catch (error) {
+
+      const errorMessage = error.response.data.message;
+      console.log(errorMessage);
       // Show error toast
-      toast.error("File upload failed!", {
+      toast.error(errorMessage, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -190,57 +193,16 @@ function PanelSectionCard() {
         theme: "colored",
       });
       console.error("Error uploading file:", error);
+      throw error; // Ensure caller handles the error
     }
   };
 
 
-  const [videos, setVideos] = useState([]);
-  const [error, setError] = useState(null);
 
 
-  const fetchAllProcessedVideos = async () => {
-    const token = localStorage.getItem("accessToken");
-
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BackendURL}/api/excel/all-videos`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-        }
-      );
-
-      setVideos(response.data); // Store data in state
-      toast.success("Processed videos fetched successfully!", {
-        position: "top-right",
-        autoClose: 3000, // Closes after 3 seconds
-      });
-    } catch (error) {
-      console.error("Error fetching processed videos:", error);
-      setError(error);
-      toast.error("❌ Failed to fetch processed videos!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
 
-  const isFetched = useRef(false); // ✅ Track fetch status
 
-  useEffect(() => {
-    if (!isFetched.current) {
-      fetchAllProcessedVideos();
-      isFetched.current = true; // Prevent re-fetch
-    }
-  }, []);
-
-
-  let isStart = false; // Track the task state globally
 
   const handleStart = async () => {
     if (!fileInputRef.current.files[0] || !fileInputRefRecord.current.files[0]) {
@@ -255,31 +217,39 @@ function PanelSectionCard() {
       return;
     }
 
-    if (isStart) { // Prevent starting if task is already in progress
-      toast.error("The task has already started.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+    setShowFileManager(true);
+
+    if (!selectedFolder.id || selectedFolder.id.trim() === "") {
       return;
     }
 
+
     setLoading(true);
-    isStart = true; // Task has started
+    setIsStart(true);
+
     const token = localStorage.getItem("accessToken");
 
     try {
-      // Upload files sequentially and wait for completion
-      await uploadExcelFile(fileInputRef.current.files[0]);
-      await uploadFile(fileInputRefRecord.current.files[0]);
 
-      // Start processing only if uploads succeed
+      setShowFileManager(false);
+      // Upload CSV file
+      try {
+        const response = await uploadExcelFile(fileInputRef.current.files[0]);
+        console.log("uploadExcelFile response:", response);
+      } catch (error) {
+        return; // Stop execution
+      }
+
+      // Upload recorded video file
+      try {
+        await uploadFile(fileInputRefRecord.current.files[0]);
+      } catch (error) {
+        return; // Stop execution
+      }
+      // Start processing
       const response = await axios.post(
         `${import.meta.env.VITE_BackendURL}/api/excel/start-processing`,
-        {},
+        { folderId: selectedFolder.id },
         {
           headers: {
             "Content-Type": "application/json",
@@ -288,24 +258,25 @@ function PanelSectionCard() {
         }
       );
 
-      toast.info("Video's processing completed successfully!", {
-        position: "bottom-right",
+      toast.success("Video processing completed successfully!", {
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        icon: <FaCheckCircle className="text-blue-500 h-16 w-16" />,
+        icon: <FaCheckCircle className="text-blue-500 h-6 w-6" />,
         theme: "light",
       });
 
       setFileName("Upload CSV to Start Task");
       setfileCamRecord("Upload your pre-recorded video");
 
-      console.log(response.data);
+      console.log("Processing response:", response.data);
     } catch (error) {
-      // Show error toast
-      toast.error(error.response.data.error, {
+      const errorMessage = error.response.data.error;
+      console.error("Error starting task:", error);
+      toast.error(errorMessage || "An unexpected error occurred", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -314,13 +285,15 @@ function PanelSectionCard() {
         draggable: true,
         theme: "colored",
       });
-      console.error("Error starting task:", error);
     } finally {
       setLoading(false);
+      setIsStart(false);
       handleRemoveFileRecord();
       handleRemoveFile();
+      setSelectedFolder({ id: "", name: "" });
     }
   };
+
 
   const handleStop = async () => {
     if (!isStart) { // Only allow stopping if task is running
@@ -380,56 +353,11 @@ function PanelSectionCard() {
       setStopLoading(false);
       handleRemoveFileRecord();
       handleRemoveFile();
-      isStart = false; // Reset task state to allow restart
+      setIsStart(false); // Reset task state to allow restart
     }
   };
 
 
-
-
-
-
-  const openModal = (notification) => {
-    setSelectedNotification(notification);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleEdit = (field, value) => {
-    setSelectedNotification({ ...selectedNotification, [field]: value });
-  };
-
-  const handleSave = () => {
-    setNotifications((prev) =>
-      prev.map((item) =>
-        item.id === selectedNotification.id ? selectedNotification : item
-      )
-    );
-    closeModal();
-  };
-
-
-  const copyToClipboard = () => {
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(selectedNotification.mergedUrl)
-        .then(() => setCopied(true))
-        .catch((err) => console.error("Clipboard copy failed:", err));
-    } else {
-      // Fallback: Create a temporary input field
-      const textArea = document.createElement("textarea");
-      textArea.value = selectedNotification.mergedUrl;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
-      setCopied(true);
-    }
-
-    setTimeout(() => setCopied(false), 2000);
-  };
 
 
   const handleDownload = () => {
@@ -465,6 +393,8 @@ function PanelSectionCard() {
 
   return (
     <>
+    {/* {loading &&  <Loader/>} */}
+   
       <div className='flex items-center justify-center flex-col'>
         <>
           <div className='flex items-center mb-6 justify-start w-full'>
@@ -483,6 +413,13 @@ function PanelSectionCard() {
               >
                 Data Panel
               </div>
+              <div
+                className={`px-8 py-2 rounded-3xl cursor-pointer transition-all ${activePanel === "folder" ? "bg-blue-700 text-white" : "bg-transparent text-gray-700"
+                  }`}
+                onClick={() => setActivePanel("folder")}
+              >
+                Folders
+              </div>
             </div>
           </div>
 
@@ -495,7 +432,7 @@ function PanelSectionCard() {
                     <div className='flex flex-col gap-5 items-center justify-center'>
                       <div className="fisrt flex flex-col sm:flex-row w-full justify-between gap-5">
 
-                        <div className="bg-blue-100 aspect-square w-full flex items-center justify-between gap-5 flex-col py-9 rounded-3xl">
+                        <div className="relative bg-blue-100 aspect-square w-full flex items-center justify-between gap-5 flex-col py-9 rounded-3xl">
                           <h1 className="text-center font-normal text-2xl capitalize">Initiate Bulk video creation</h1>
 
                           <button
@@ -505,6 +442,14 @@ function PanelSectionCard() {
                           >
                             {loading ? (<>Creating...<ImSpinner2 className="animate-spin text-white text-lg" /></>) : (
                               <div className='uppercase flex items-center gap-1 font-semibold '> <FaPlay /> Start </div>)}</button>
+                          {selectedFolder.name && (
+                            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex items-center gap-2">
+                              <span className='text-xs font-semibold capitalize text-green-600 underline'>{selectedFolder.name}</span>
+                              <button onClick={() => { setSelectedFolder({ id: null, name: null }) }} className=" border-2 rounded-full border-blue-400 text-blue-400 cursor-pointer text-sm hover:text-red-800">
+                                <IoClose />
+                              </button>
+                            </div>
+                          )}
                         </div>
 
                         <div className="relative z-10 bg-blue-100 aspect-square w-full flex items-center justify-between gap-5 flex-col py-9 rounded-3xl">
@@ -585,101 +530,38 @@ function PanelSectionCard() {
                   </div>
                 </div>
               </div>
+              {showFileManager && console.log("Rendering FileManager")}
+              {showFileManager && (
+                <div className="fixed z-50 inset-0 flex items-center justify-center bg-[#0000004b] bg-opacity-50">
+                  <div className="relative bg-white p-6 rounded-md shadow-lg ">
+                    <div className='absolute top-2 right-2 cursor-pointer text-red-500 ' onClick={() => setShowFileManager(false)} ><IoClose className='text-3xl' /></div>
+                    <FileUpload
+                      disableOpenFolder={true}
+                      onSelectFolder={(folderId, folderName) => {
+                        console.log("🗂 Folder selected:", folderId, folderName);
+                        setSelectedFolder({ id: folderId, name: folderName });
+                        setShowFileManager(false);
+                      }}
+                    />
+
+
+                  </div>
+                </div>
+              )}
             </>
           )}
 
           {activePanel === "data" && (
             <>
-              {videos?.videos.length === 0 && (
-                <p className='text-center text-2xl pt-20'>No video found, make your first video. Now</p>
-              )}
-              <div className="relative w-full flex flex-col gap-4 z-50 py-2 overflow-y-auto h-[75vh] lg:h-[420px] px-4 bg-transparent rounded-lg no-scrollbar scroll-smooth">
-                {videos?.videos?.map((videoGroup) =>
-                  videoGroup.videos.map((video) => (
-                    <div
-                      key={video._id}
-                      className="flex items-center bg-blue-100 py-3 rounded-3xl px-5 shadow-md"
-                    >
-                      <div className="flex justify-between w-full border-blue-700 px-4 gap-20">
-                        <div className="flex flex-col items-start w-full">
-                          <h1 className="text-md font-mono">
-                            {video.websiteUrl.length > 20
-                              ? video.websiteUrl.slice(0, 20) + "..."
-                              : video.websiteUrl}
-                          </h1>
-                          <p className="text-gray-700 text-xs border-t border-blue-500">
-                            {video.mergedUrl.length > 40
-                              ? video.mergedUrl.slice(0, 40) + "..."
-                              : video.mergedUrl}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          {/* <span className="text-green-500 bg-white p-2 rounded-full hover:bg-green-500 hover:text-white cursor-pointer transition-all duration-400">
-                            <FaPen />
-                          </span> */}
-                          <span className="text-red-500 bg-white p-2 rounded-full hover:bg-red-500 hover:text-white cursor-pointer transition-all duration-400">
-                            <MdDelete />
-                          </span>
-                          <span
-                            className="text-blue-500 bg-white p-2 rounded-full hover:bg-blue-500 hover:text-white cursor-pointer transition-all duration-400"
-                            onClick={() => openModal(video)}
-                          >
-                            <FaEye />
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {isModalOpen && selectedNotification && (
-                <div className="fixed inset-0 bg-[#00000029] bg-opacity-50 flex items-center justify-center z-50">
-                  <div className="bg-white p-6 rounded-lg w-96 shadow-lg">
-                    <div className="flex justify-between items-center gap-3 mt-4">
-                      <h2 className="text-xl font-bold mb-4">Video Details</h2>
-                      <button
-                        className="px-2 py-1 border cursor-pointer border-white rounded-md hover:border-red-500 text-red-500 transition-all duration-200"
-                        onClick={closeModal}
-                      >
-                        <RxCross2 className="font-bold text-3xl" />
-                      </button>
-                    </div>
-
-                    {/* Website URL Input */}
-                    <label className="block text-sm font-medium text-gray-700">Website URL:</label>
-                    <input
-                      type="text"
-                      readOnly
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                      value={selectedNotification.websiteUrl}
-                    />
-
-                    {/* Merged Video URL Input with Copy Button */}
-                    <label className="block text-sm font-medium text-gray-700">Merged Video URL:</label>
-                    <div className="flex items-center border border-gray-300 rounded-md px-3 py-2 mb-3 bg-gray-100">
-                      <input
-                        type="text"
-                        className="w-full bg-transparent outline-none text-gray-700"
-                        value={selectedNotification.mergedUrl}
-                        readOnly
-                      />
-                      <button
-                        className="ml-2 cursor-pointer text-blue-500 hover:text-blue-700 transition-all duration-200"
-                        onClick={() => copyToClipboard(selectedNotification.mergedUrl)}
-                      >
-                        <FaCopy />
-                      </button>
-                    </div>
-
-                    {/* Copy Notification */}
-                    {copied && <p className="text-green-500 text-sm">Copied!</p>}
-                  </div>
-                </div>
-              )}
+                <DataPanel/>
             </>
 
+          )}
+
+          {activePanel === "folder" && (
+            <>
+              <FileUpload />
+            </>
           )}
 
         </>

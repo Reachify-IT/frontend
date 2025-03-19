@@ -142,7 +142,7 @@ function LoginPage() {
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
-              <Link to="/forget-password" className="mt-4">
+              <Link to="/forgot-password" className="mt-4">
                 <span>
                   &#40;Forgot Password? <span className="text-red-500">Reset Here</span> &#41;
                 </span>

@@ -48,7 +48,7 @@ export default function Landinpage() {
                         </Link>
 
                         {/* Mobile Menu Button */}
-                        <div className="sm:hidden cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+                        <div className="lg:hidden cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
                             {isOpen ? <IoClose size={24} /> : <RxHamburgerMenu size={24} />}
                         </div>
 
@@ -89,7 +89,7 @@ export default function Landinpage() {
                         </div>
 
                         {/* Desktop Menu */}
-                        <div className="hidden sm:flex items-center justify-between gap-10">
+                        <div className="hidden lg:flex items-center justify-between gap-10">
                             <a href="https://www.reachifyinnovations.com/" target="_blank" rel="noopener noreferrer">
                                 <p className="hover:text-neutral-500 relative z-10 transition-all duration-300 ease-in-out">Reachify</p>
                             </a>
@@ -408,13 +408,15 @@ export default function Landinpage() {
                                     <a href="https://www.reachifyinnovations.com/blog" target='_blank'>
                                         <li className='text-white hover:text-neutral-300 cursor-pointer'>Blogs</li>
                                     </a>
-                                    <a href="https://www.reachifyinnovations.com/privacypolicy" target='_blank'>
+                                    <Link to="/privacy-policy">
                                         <li className='text-white hover:text-neutral-300 cursor-pointer'>Privacy Policy</li>
-                                    </a>
-                                    <a href="https://www.reachifyinnovations.com/reachifyteams" target='_blank'>
+                                    </Link>
+                                    <Link to='/terms-and-conditions'>
                                         <li className='text-white hover:text-neutral-300 cursor-pointer'>Terms & Conditions</li>
-                                    </a>
+                                    </Link>
+                                    <Link to="/refunds-policy">
                                     <li className='text-white hover:text-neutral-300 cursor-pointer'>Refund Policy</li>
+                                    </Link>
                                 </ul>
                             </div>
                             <div>

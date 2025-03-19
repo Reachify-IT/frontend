@@ -6,6 +6,7 @@ import outlook from "../assets/outlook.webp";
 import { toast } from "react-toastify";
 import { FaPen } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import Loader from "./Loader";
 
 const GoogleAuth = () => {
     const [message, setMessage] = useState("");
@@ -178,6 +179,7 @@ const GoogleAuth = () => {
 
     useEffect(() => {
         const fetchAllMailInfo = async () => {
+            setLoading(true);
             try {
                 const token = localStorage.getItem("accessToken");
                 if (!token) {
@@ -207,6 +209,9 @@ const GoogleAuth = () => {
             } catch (error) {
                 console.error("❌ Error fetching mail info:", error.response?.data || error.message);
             }
+            finally {
+                setLoading(false);
+            }
         };
 
         fetchAllMailInfo();
@@ -220,6 +225,8 @@ const GoogleAuth = () => {
 
 
     return (
+        <>
+        {loading && <Loader/>}
         <div className="flex items-center justify-center  pt-10">
             {data.email != null || googledata.email != null || imapdata.email != null ? (
                 <div className="relative max-w-md flex h-80 items-center justify-center flex-col  bg-blue-100 rounded-2xl">
@@ -421,6 +428,7 @@ const GoogleAuth = () => {
 
 
         </div>
+        </>
     );
 };
 

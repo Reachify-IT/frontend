@@ -10,7 +10,7 @@ const notificationSlice = createSlice({
       state.notifications.push(action.payload);
     },
     resetNotifications: (state) => {
-      state.notifications = []; // Clear notifications on logouts
+      state.notifications = []; // Clear notifications on logout
     },
   },
 });
