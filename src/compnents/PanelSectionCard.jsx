@@ -69,7 +69,7 @@ function PanelSectionCard() {
   const [activePanel, setActivePanel] = useState("task");
 
   const [notifications, setNotifications] = useState(data);
-  
+
   const [isStart, setIsStart] = useState(false);
 
   const [fileName, setFileName] = useState("Upload CSV to Start Task");
@@ -81,6 +81,9 @@ function PanelSectionCard() {
   const [StopLoading, setStopLoading] = useState(false);
   const [showFileManager, setShowFileManager] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState({ id: "", name: "" });
+
+  const [excelUrl, setExcelUrl] = useState(null);
+  const [videoUrl, setVideoUrl] = useState(null);
 
 
 
@@ -136,6 +139,7 @@ function PanelSectionCard() {
         theme: "light",
       });
       console.log(response.data);
+      return response.data.path;
     } catch (error) {
       toast.error(error.message, {
         position: "top-right",
@@ -178,6 +182,7 @@ function PanelSectionCard() {
         theme: "light",
       });
       console.log(response.data);
+      return response.data.path;
     } catch (error) {
 
       const errorMessage = error.response.data.message;
@@ -196,11 +201,6 @@ function PanelSectionCard() {
       throw error; // Ensure caller handles the error
     }
   };
-
-
-
-
-
 
 
 
@@ -223,33 +223,55 @@ function PanelSectionCard() {
       return;
     }
 
-
     setLoading(true);
     setIsStart(true);
+    setShowFileManager(false);
 
     const token = localStorage.getItem("accessToken");
 
     try {
-
-      setShowFileManager(false);
       // Upload CSV file
+      let excelUrl;
       try {
         const response = await uploadExcelFile(fileInputRef.current.files[0]);
-        console.log("uploadExcelFile response:", response);
+        console.log("Excel uploaded:", response);
+        excelUrl = response; // Store response in local variable
       } catch (error) {
+        toast.error("Error uploading CSV file. Please try again.", {
+          position: "top-right",
+        });
         return; // Stop execution
       }
 
       // Upload recorded video file
+      let videoUrl;
       try {
-        await uploadFile(fileInputRefRecord.current.files[0]);
+        const response = await uploadFile(fileInputRefRecord.current.files[0]);
+        console.log("Recorded video uploaded:", response);
+        videoUrl = response; // Store response in local variable
       } catch (error) {
+        toast.error("Error uploading recorded video file. Please try again.", {
+          position: "top-right",
+        });
         return; // Stop execution
       }
+
+      // Ensure both URLs are set before proceeding
+      if (!excelUrl || !videoUrl) {
+        toast.error("File upload failed. Please try again.", {
+          position: "top-right",
+        });
+        return;
+      }
+
       // Start processing
       const response = await axios.post(
         `${import.meta.env.VITE_BackendURL}/api/excel/start-processing`,
-        { folderId: selectedFolder.id },
+        {
+          folderId: selectedFolder.id,
+          excelUrl, // Use local variables
+          videoUrl, // Use local variables
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -274,9 +296,9 @@ function PanelSectionCard() {
 
       console.log("Processing response:", response.data);
     } catch (error) {
-      const errorMessage = error.response.data.error;
       console.error("Error starting task:", error);
-      toast.error(errorMessage || "An unexpected error occurred", {
+      const errorMessage = error.response?.data?.error || "An unexpected error occurred";
+      toast.error(errorMessage, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -293,6 +315,7 @@ function PanelSectionCard() {
       setSelectedFolder({ id: "", name: "" });
     }
   };
+
 
 
   const handleStop = async () => {
@@ -393,8 +416,8 @@ function PanelSectionCard() {
 
   return (
     <>
-    {/* {loading &&  <Loader/>} */}
-   
+      {/* {loading &&  <Loader/>} */}
+
       <div className='flex items-center justify-center flex-col'>
         <>
           <div className='flex items-center mb-6 justify-start w-full'>
@@ -553,7 +576,7 @@ function PanelSectionCard() {
 
           {activePanel === "data" && (
             <>
-                <DataPanel/>
+              <DataPanel />
             </>
 
           )}

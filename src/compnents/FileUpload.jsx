@@ -42,7 +42,6 @@ const FileManager = ({ onSelectFolder, disableOpenFolder = false }) => {
 
     // Fetch folders
     useEffect(() => {
-
         fetchFolders();
     }, []);
 
