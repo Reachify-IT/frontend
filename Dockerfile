@@ -1,19 +1,37 @@
-FROM node:alpine3.18 as build
+# Build Stage
+FROM node:alpine3.18 AS build
 
-# Declare build time environment variables
+# Declare build-time environment variables
 ARG VITE_BackendURL
-# et
-# Build App
+ENV VITE_BackendURL=$VITE_BackendURL
+
+# Set working directory
 WORKDIR /app
-COPY package.json .
-RUN npm install
+
+# Copy package.json and package-lock.json first (Better Docker caching)
+COPY package.json package-lock.json ./
+RUN npm install --frozen-lockfile
+
+# Copy the full project source code
 COPY . .
+
+# Build the frontend
 RUN npm run build
 
 # Serve with Nginx
-FROM nginx:1.23-alpine
-WORKDIR /usr/share/nginx/html
-RUN rm -rf *
-COPY --from=build /app/dist .
+FROM nginx:1.23-alpine AS runtime
+
+# Ensure the directory exists before removing contents
+RUN mkdir -p /usr/share/nginx/html && rm -rf /usr/share/nginx/html/*
+
+# Copy built frontend files from the build stage
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy custom Nginx configuration
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
 EXPOSE 80
-ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
+
+# Start Nginx
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
