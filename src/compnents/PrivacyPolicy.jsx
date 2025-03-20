@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "../assets/Reachify (32).png";
+import logo from "../assets/reachify (32).png";
 import { Link } from 'react-router-dom';
 
 
@@ -21,11 +21,11 @@ export default function PrivacyPolicy() {
                 <div className="center-blob-2"></div>
                 <div className="bg-white max-w-3xl p-8 rounded-lg h-[80vh] overflow-y-auto w-full">
                     <div className='flex flex-col gap-8'>
-                        <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Privacy Policy at Reachify</h1>
+                        <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">Privacy Policy at Loomify</h1>
                         <div>
                             <h2 className="text-2xl font-semibold mt-8 text-gray-700">Introduction</h2>
                             <p className="text-gray-600 mt-2">
-                                At Reachify, we prioritize your privacy and the security of your personal information. This privacy policy outlines our
+                                At Loomify, we prioritize your privacy and the security of your personal information. This privacy policy outlines our
                                 practices regarding the collection, use, protection, and sharing of information obtained from users of our website.
                                 By accessing and using our website, you agree to the terms and conditions set forth in this privacy policy.
                             </p>
@@ -77,7 +77,7 @@ export default function PrivacyPolicy() {
                         <div>
                             <h2 className="text-2xl font-semibold mt-4 text-gray-700">Sharing of Information</h2>
                             <p className="text-gray-600 mt-2">
-                                Reachify is committed to not selling, trading, or renting your personal information to third parties. However, your information may be shared under the following circumstances:
+                                Loomify is committed to not selling, trading, or renting your personal information to third parties. However, your information may be shared under the following circumstances:
                             </p>
                             <ul className="list-disc pl-6 text-gray-600 mt-2">
                                 <li>With service providers who perform functions on our behalf, under strict confidentiality agreements</li>
@@ -107,7 +107,7 @@ export default function PrivacyPolicy() {
                         <div>
                             <h2 className="text-2xl font-semibold mt-4 text-gray-700">Changes to This Privacy Policy</h2>
                             <p className="text-gray-600 mt-2">
-                                Reachify reserves the right to update or change our privacy policy at any time. Any changes will be posted on this page with an
+                                Loomify reserves the right to update or change our privacy policy at any time. Any changes will be posted on this page with an
                                 updated revision date. We encourage you to review our privacy policy periodically to stay informed about how we are protecting the
                                 information we collect.
                             </p>
@@ -118,10 +118,8 @@ export default function PrivacyPolicy() {
                             <p className="text-gray-600 mt-2">
                                 If you have any questions or comments about this privacy policy, please contact us at:
                             </p>
-                            <p className="text-gray-600 font-medium">Reachify Customer Service</p>
-                            <p className="text-gray-600 font-medium">Support@reachify.marketing</p>
-
-                            <p className="text-gray-600 mt-6">This privacy policy is effective as of <strong>1.01.2024</strong> and will be updated as necessary to reflect changes in our practices or relevant regulations.</p>
+                            <p className="text-gray-600 font-medium">Loomify Customer Service</p>
+                            <p className="text-gray-600 font-medium">Support@Loomifyinnovations.com</p>
                         </div>
 
                     </div>

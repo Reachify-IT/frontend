@@ -82,8 +82,7 @@ function PanelSectionCard() {
   const [showFileManager, setShowFileManager] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState({ id: "", name: "" });
 
-  const [excelUrl, setExcelUrl] = useState(null);
-  const [videoUrl, setVideoUrl] = useState(null);
+  const [jobId, setJobId] = useState(null); 
 
 
 
@@ -285,6 +284,7 @@ function PanelSectionCard() {
           icon: <FaCheckCircle className="text-blue-500 h-6 w-6" />,
           theme: "light",
         });
+        setJobId(response.data.jobId);
       }
 
       setFileName("Upload CSV to Start Task");
@@ -315,7 +315,7 @@ function PanelSectionCard() {
 
 
   const handleStop = async () => {
-    if (!isStart) { // Only allow stopping if task is running
+    if (!jobId) { // Only allow stopping if task is running
       toast.error("Please start the task before stopping it.", {
         position: "top-right",
         autoClose: 3000,
@@ -334,7 +334,7 @@ function PanelSectionCard() {
       // Terminate the process
       const response = await axios.post(
         `${import.meta.env.VITE_BackendURL}/api/excel/terminate`,
-        {},
+        {jobId},
         {
           headers: {
             "Content-Type": "application/json",
