@@ -3,7 +3,6 @@ FROM node:alpine3.18 AS build
 
 # Declare build-time environment variables
 ARG VITE_BackendURL
-ENV VITE_BackendURL=$VITE_BackendURL
 
 # Set working directory
 WORKDIR /app
@@ -20,9 +19,6 @@ RUN npm run build
 
 # Serve with Nginx
 FROM nginx:1.23-alpine AS runtime
-
-# Ensure the directory exists before removing contents
-RUN mkdir -p /usr/share/nginx/html && rm -rf /usr/share/nginx/html/*
 
 # Copy built frontend files from the build stage
 COPY --from=build /app/dist /usr/share/nginx/html
