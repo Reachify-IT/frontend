@@ -3,7 +3,7 @@ FROM node:alpine3.18 as build
 # Declare build time environment variables
 ARG VITE_BackendURL
 # et
-# Build App
+# Build Apps
 WORKDIR /app
 COPY package.json .
 RUN npm install
