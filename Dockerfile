@@ -7,7 +7,7 @@ ARG VITE_BackendURL
 # Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first (Better Docker caching)
+# Copy package.json and package-lock.json first (Better Docker caching))
 COPY package.json .
 RUN npm install
 
