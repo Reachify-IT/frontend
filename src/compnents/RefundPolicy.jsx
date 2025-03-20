@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from "../assets/reachify (32).png";
+import logo from "../assets/Reachify (32).png";
 import { Link } from 'react-router-dom';
 
 export default function RefundPolicy() {
