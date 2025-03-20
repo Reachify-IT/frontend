@@ -26,7 +26,7 @@ import NotFound from "./compnents/NotFound";
 import ResetPass from "./pages/ResetPass";
 import ForgotPassword from "./pages/ForgetPassword";
 import PrivacyPolicy from "./compnents/PrivacyPolicy";
-import TermAndConditions from "./compnents/TermAnd Conditions";
+import TermAndConditions from "./compnents/TermAndConditions";
 import RefundPolicy from "./compnents/RefundPolicy";
 
 function Layout() {
@@ -97,22 +97,27 @@ function App() {
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
-    socketService.connect(user?._id);
+    if (!user) return; // Don't connect if there's no user
 
-    socketService.listen("notification", (data) => {
+    // Connect socket with user ID
+    socketService.connect(user._id);
+
+    // Listen for notifications
+    const handleNotification = (data) => {
       dispatch(addNotification(data.message));
-
       console.log("New Notification:", data.message);
 
       if (Notification.permission === "granted") {
         new Notification("New Notification", { body: data.message });
       }
-    });
+    };
+
+    socketService.listen("notification", handleNotification);
 
     return () => {
       socketService.disconnect();
     };
-  }, [dispatch]);
+  }, [user, dispatch]); // Depend on user and dispatch
 
   return (
     <BrowserRouter>

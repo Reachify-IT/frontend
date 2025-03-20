@@ -129,7 +129,7 @@ function PanelSectionCard() {
         }
       );
       toast.info("Cam-Video uploaded successful!", {
-        position: "bottom-right",
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -172,7 +172,7 @@ function PanelSectionCard() {
         }
       );
       toast.info("Excel file uploaded successfully!", {
-        position: "bottom-right",
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -237,9 +237,6 @@ function PanelSectionCard() {
         console.log("Excel uploaded:", response);
         excelUrl = response; // Store response in local variable
       } catch (error) {
-        toast.error("Error uploading CSV file. Please try again.", {
-          position: "top-right",
-        });
         return; // Stop execution
       }
 
@@ -250,9 +247,6 @@ function PanelSectionCard() {
         console.log("Recorded video uploaded:", response);
         videoUrl = response; // Store response in local variable
       } catch (error) {
-        toast.error("Error uploading recorded video file. Please try again.", {
-          position: "top-right",
-        });
         return; // Stop execution
       }
 
@@ -280,16 +274,18 @@ function PanelSectionCard() {
         }
       );
 
-      toast.success("Video processing completed successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        icon: <FaCheckCircle className="text-blue-500 h-6 w-6" />,
-        theme: "light",
-      });
+      if (response.data.success) {
+        toast.success(response.data.message, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          icon: <FaCheckCircle className="text-blue-500 h-6 w-6" />,
+          theme: "light",
+        });
+      }
 
       setFileName("Upload CSV to Start Task");
       setfileCamRecord("Upload your pre-recorded video");
@@ -348,7 +344,7 @@ function PanelSectionCard() {
       );
 
       toast.info("Task stopped successfully!", {
-        position: "bottom-right",
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -429,13 +425,13 @@ function PanelSectionCard() {
               >
                 Task Panel
               </div>
-              <div
+              {/* <div
                 className={`px-8 py-2 rounded-3xl cursor-pointer transition-all ${activePanel === "data" ? "bg-blue-700 text-white" : "bg-transparent text-gray-700"
                   }`}
                 onClick={() => setActivePanel("data")}
               >
                 Data Panel
-              </div>
+              </div> */}
               <div
                 className={`px-8 py-2 rounded-3xl cursor-pointer transition-all ${activePanel === "folder" ? "bg-blue-700 text-white" : "bg-transparent text-gray-700"
                   }`}
@@ -574,12 +570,12 @@ function PanelSectionCard() {
             </>
           )}
 
-          {activePanel === "data" && (
+          {/* {activePanel === "data" && (
             <>
               <DataPanel />
             </>
 
-          )}
+          )} */}
 
           {activePanel === "folder" && (
             <>

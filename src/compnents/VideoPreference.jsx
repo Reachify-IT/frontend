@@ -58,7 +58,7 @@ export default function VideoPreference() {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg w-full max-w-lg mx-auto">
+    <div className="p-6 bg-white rounded-lg  w-full max-w-lg mx-auto">
       <h2 className="text-2xl font-semibold text-blue-900 mb-4">Video Preference</h2>
 
       <form onSubmit={handleVideoPreferenceSubmit} className="flex flex-col gap-5">

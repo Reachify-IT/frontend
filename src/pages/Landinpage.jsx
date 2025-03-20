@@ -358,7 +358,7 @@ export default function Landinpage() {
                                 </div>
                             </div>
                             <div>
-                                <img src={getImage} alt="" className='w-[350px] h-full object-contain' />
+                                <img src={getImage} alt="" className='hidden lg:block w-[350px] h-full object-contain' />
                             </div>
                         </div>
                     </div>

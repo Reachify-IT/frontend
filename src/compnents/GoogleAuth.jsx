@@ -64,7 +64,7 @@ const GoogleAuth = () => {
                 }
             );
 
-            toast.info("Processing started successfully!", {
+            toast.info("Mail info saved successfully!", {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -137,8 +137,6 @@ const GoogleAuth = () => {
             setLoading(false);
         }  
     }
-
-
 
 
     const loginWithMicrosoft = async () => {
