@@ -10,7 +10,7 @@ const plans = [
   {
     id: "starter",
     name: "Starter",
-    price: 1,
+    price: 1000,
     looms: 2000,
     icon: <FaUser className="h-16 w-16 text-blue-700" />,
   },
