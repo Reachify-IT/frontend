@@ -195,11 +195,12 @@ const FileManager = ({ onSelectFolder, disableOpenFolder = false }) => {
     return (
         <>
         {isLoading && <Loader/>}
-        <div className="max-w-4xl mx-auto p-6 bg-white  rounded-lg mt-10">
+        <div className="w-full mx-auto px-16 bg-white  rounded-lg flex items-start justify-start flex-col">
             <h2 className="text-2xl font-semibold text-center mb-4">File Manager</h2>
 
+            <div className="h-[60vh] overflow-y-auto w-full relative z-50">
             {/* Folder Grid */}
-            <div className={`grid grid-cols-3 gap-4 p-4  rounded-lg ${folders.length === 0 ? "flex justify-center" : ""}`}>
+            <div className={`grid grid-cols-4 xl:grid-cols-6  gap-4 p-4  rounded-lg ${folders.length === 0 ? "flex justify-center" : ""}`}>
                 {folders.map((folder) => (
                     <div
                         key={folder._id}
@@ -214,8 +215,8 @@ const FileManager = ({ onSelectFolder, disableOpenFolder = false }) => {
                             onSelectFolder(folder._id, folder.name);
                         }}
                     >
-                        <FaFolder className="text-yellow-500 text-3xl" />
-                        <p className="mt-2 text-sm font-medium capitalize">{folder.name}</p>
+                        <FaFolder className="text-blue-500 text-4xl" />
+                        <p className="mt-2 text-sm font-medium capitalize">{folder.name.length > 10 ? folder.name.slice(0, 10) + "..." : folder.name}</p>
                         {!disableOpenFolder && (
                             <div className="hidden group-hover:flex absolute top-1 right-1 rounded-full bg-white p-1 shadow-md" onClick={(event) => {
                                 event.stopPropagation(); // Prevents parent div click event
@@ -262,6 +263,7 @@ const FileManager = ({ onSelectFolder, disableOpenFolder = false }) => {
                     </div>
                 </div>
             )}
+               </div>
 
         </div>
         </>

@@ -96,6 +96,36 @@ function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
+    const fetchUserInfo = async () => {
+        setIsloading(true);
+        try {
+          const token = localStorage.getItem("accessToken");
+          if (!token) throw new Error("No access token found");
+    
+          const response = await axios.get(`${import.meta.env.VITE_BackendURL}/api/auth/me`, {
+            headers: { Authorization: `${token}` },
+          });
+    
+          console.log(response.data.user);
+    
+          setuserFormData({
+            username: response.data.user?.username || "",
+            email: response.data.user?.email || "",
+            phoneNumber: response.data.user?.phoneNumber || "",
+          });
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+          setuserMessage({ type: "error", text: "Failed to fetch user info" });
+        }
+        finally {
+          setIsloading(false);
+        }
+      };
+    
+      useEffect(() => {
+        fetchUserInfo();
+      }, []);
+
   useEffect(() => {
     if (!user) return; // Don't connect if there's no user
 
