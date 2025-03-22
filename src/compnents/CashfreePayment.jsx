@@ -9,7 +9,7 @@ export default function CashfreePayment() {
   useEffect(() => {
     const initializeCashfree = async () => {
       try {
-        const cashfreeInstance = await load({ mode: "sandbox" });
+        const cashfreeInstance = await load({ mode: "production" });
         setCashfree(cashfreeInstance);
       } catch (error) {
         console.error("❌ Error initializing Cashfree:", error);
