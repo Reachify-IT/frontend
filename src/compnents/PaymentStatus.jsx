@@ -23,7 +23,7 @@ export default function PaymentStatus() {
         },
       })
       .then((res) => setStatus(res.data.status)) // ✅ Fixed incorrect comma
-      .catch(() => setStatus("Failed to fetch payment status"));
+      .catch(() => setStatus("Failed"));
   }, [orderId]);
   
 
@@ -42,7 +42,7 @@ export default function PaymentStatus() {
                 ? "bg-green-100 text-green-600"
                 : status === "FAILED"
                 ? "bg-red-100 text-red-600"
-                : "bg-yellow-100 text-yellow-600"
+                : "bg-red-100 text-red-600"
             }`}
           >
             {status}

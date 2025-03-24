@@ -43,7 +43,7 @@ const PricingSection = () => {
   useEffect(() => {
     const initializeCashfree = async () => {
       try {
-        const cashfreeInstance = await load({ mode: "production" });
+        const cashfreeInstance = await load({ mode: "Production" });
         setCashfree(cashfreeInstance);
       } catch (error) {
         console.error("❌ Error initializing Cashfree:", error);
@@ -138,7 +138,7 @@ const PricingSection = () => {
     <div>
       <div className="flex flex-wrap items-center justify-center gap-10 relative z-50 mt-5">
         {plans.map((plan) => {
-          const isActive = PaymentStatus === "PAID" && planDetails === plan.name;
+          const isActive = PaymentStatus === "SUCCESS" && planDetails === plan.name;
           return (
             <div
               key={plan.id}
