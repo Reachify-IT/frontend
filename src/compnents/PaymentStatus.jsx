@@ -40,8 +40,8 @@ export default function PaymentStatus() {
             ${
               status === "SUCCESS"
                 ? "bg-green-100 text-green-600"
-                : status === "FAILED"
-                ? "bg-red-100 text-red-600"
+                : status === "ACTIVE"
+                ? "bg-red-100 text-yellow-600"
                 : "bg-red-100 text-red-600"
             }`}
           >

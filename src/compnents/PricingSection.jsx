@@ -43,7 +43,7 @@ const PricingSection = () => {
   useEffect(() => {
     const initializeCashfree = async () => {
       try {
-        const cashfreeInstance = await load({ mode: "Production" });
+        const cashfreeInstance = await load({ mode: "production" });
         setCashfree(cashfreeInstance);
       } catch (error) {
         console.error("❌ Error initializing Cashfree:", error);
