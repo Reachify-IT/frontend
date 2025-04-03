@@ -16,7 +16,7 @@ import loomS4  from "../assets/loom/SmallTopRight.png";
 import loomM1 from "../assets/loom/MediumTopRight.png";
 import loomM2 from "../assets/loom/MediumBottomRight.png";
 import loomM3 from "../assets/loom/MediumBottomLeft.png";
-import loomM4 from "../assets/loom/MediumTopLeft.png";
+import loomM4 from "../assets/loom/MediumTopleft.png";
 
 import loomL1 from "../assets/loom/LargeTopRight.png";
 import loomL2 from "../assets/loom/LargeBottomRight.png";
