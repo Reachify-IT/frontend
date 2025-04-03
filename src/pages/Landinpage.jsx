@@ -415,7 +415,7 @@ export default function Landinpage() {65
                                         <li className='text-white hover:text-neutral-300 cursor-pointer'>Blogs</li>
                                     </a>
                                     <Link to="/pricing-page">
-                                        <li className='text-white hover:text-neutral-300 cursor-pointer'>Pricing Page</li>
+                                        <li className='text-white hover:text-neutral-300 cursor-pointer'>Pricing</li>
                                     </Link>
                                     <Link to="/privacy-policy">
                                         <li className='text-white hover:text-neutral-300 cursor-pointer'>Privacy Policy</li>
