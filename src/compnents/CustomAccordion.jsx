@@ -99,7 +99,7 @@ const CustomAccordion = () => {
             onClick={() => toggleAccordion(item.id)}
             className="w-full flex justify-between items-center py-4 px-5 md:px-6 transition duration-300"
           >
-            <span className="text-lg md:text-xl font-semibold cursor-pointer">{item.title}</span>
+            <span className="text-lg md:text-xl font-semibold cursor-pointer heading-font">{item.title}</span>
             <div className="bg-blue-900 p-2 md:p-3 rounded-full">
               {openAccordion === item.id ? (
                 <FaChevronUp className="text-white text-sm md:text-base" />
@@ -109,7 +109,7 @@ const CustomAccordion = () => {
             </div>
           </button>
           {openAccordion === item.id && (
-            <div className="p-5 text-gray-900 text-base md:text-lg">
+            <div className="p-5 text-gray-900 text-base md:text-lg subheading">
               {Array.isArray(item.content) ? (
                 <ul className="list-none pl-5">
                   {item.content.map((point, index) => (

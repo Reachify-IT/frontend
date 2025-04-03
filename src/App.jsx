@@ -13,7 +13,7 @@ import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addNotification } from "../features/notificationSlice";
 import socketService from "../features/socketService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PaymentStatus from "./compnents/PaymentStatus";
 
 
@@ -28,12 +28,15 @@ import ForgotPassword from "./pages/ForgetPassword";
 import PrivacyPolicy from "./compnents/PrivacyPolicy";
 import TermAndConditions from "./compnents/TermAndConditions";
 import RefundPolicy from "./compnents/RefundPolicy";
+import axios from "axios";
+import { setMailCount } from "../features/mailCountSlice";
+import PricingPage from "./pages/PricingPage";
 
 function Layout() {
   const location = useLocation();
   const navigate = useNavigate(); // ✅ Use inside <BrowserRouter>
   const dispatch = useDispatch();
-  const isLandingPage = location.pathname === "/" || location.pathname === "/privacy-policy" || location.pathname === "/terms-and-conditions" || location.pathname === "/refunds-policy";
+  const isLandingPage = location.pathname === "/" || location.pathname === "/privacy-policy" || location.pathname === "/terms-and-conditions" || location.pathname === "/refunds-policy" || location.pathname === "/pricing-page";
 
   const token = localStorage.getItem("accessToken");
 
@@ -55,6 +58,8 @@ function Layout() {
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, [dispatch, navigate]);
+
+
 
   return (
     <>
@@ -81,6 +86,7 @@ function Layout() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermAndConditions />} />
         <Route path="/refunds-policy" element={<RefundPolicy />} />
+        <Route path="/pricing-page" element={<PricingPage />} />
 
 
         <Route path="*" element={<NotFound />} />
@@ -96,35 +102,28 @@ function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
-    const fetchUserInfo = async () => {
-        setIsloading(true);
-        try {
-          const token = localStorage.getItem("accessToken");
-          if (!token) throw new Error("No access token found");
-    
-          const response = await axios.get(`${import.meta.env.VITE_BackendURL}/api/auth/me`, {
-            headers: { Authorization: `${token}` },
-          });
-    
-          console.log(response.data.user);
-    
-          setuserFormData({
-            username: response.data.user?.username || "",
-            email: response.data.user?.email || "",
-            phoneNumber: response.data.user?.phoneNumber || "",
-          });
-        } catch (error) {
-          console.error("Error fetching user info:", error);
-          setuserMessage({ type: "error", text: "Failed to fetch user info" });
-        }
-        finally {
-          setIsloading(false);
-        }
-      };
-    
-      useEffect(() => {
-        fetchUserInfo();
-      }, []);
+
+  useEffect(() => {
+    const getMailCount = async () => {
+
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) throw new Error("No access token found");
+
+        const response = await axios.get(`${import.meta.env.VITE_BackendURL}/api/auth/get-mail-count`, {
+          headers: { Authorization: `${token}` },
+        });
+
+        dispatch(setMailCount(response.data.data));
+      } catch (error) {
+        console.error("Error fetching mail count:", error);
+      }
+    };
+
+    getMailCount();
+  }, [dispatch]);
+
+
 
   useEffect(() => {
     if (!user) return; // Don't connect if there's no user

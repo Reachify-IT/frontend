@@ -9,6 +9,8 @@ import {
   Tooltip,
   Legend
 } from "chart.js";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 // Register necessary ChartJS components
 ChartJS.register(
@@ -22,16 +24,55 @@ ChartJS.register(
 );
 
 const BarChart = () => {
+  const [monthlyVideos, setMonthlyVideos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchUserInfo = async () => {
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) throw new Error("No access token found");
+
+      const response = await axios.get(`${import.meta.env.VITE_BackendURL}/api/auth/me`, {
+        headers: { Authorization: `${token}` },
+      });
+
+      console.log("🚀 Monthly Videos:", response.data.monthlyVideos);
+      setMonthlyVideos(response.data.monthlyVideos);
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  // Convert month number to month name
+  const monthNames = [
+    "Jan", "Feb", "Mar", "Apr", "May", "June",
+    "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+  ];
+
+  // Create a default object with 0 values for all months
+  const defaultData = Array(12).fill(0);
+
+  // Populate the data array based on the API response
+  monthlyVideos.forEach((item) => {
+    defaultData[item.month - 1] = item.totalVideos; // Adjust month index
+  });
+
   const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    labels: monthNames,
     datasets: [
       {
-        label: "Monthly Sales",
-        // backgroundColor: 'rgb(255, 0, 0)',
-        hoverBackgroundColor: 'rgb(255, 0, 0)',
-        backgroundColor: 'rgb(255, 101, 98)',
-        borderRadius: 10, // Rounded corners
-        data: [186, 305, 237, 73, 209, 214, 190, 250, 200, 250, 50, 230],
+        label: "Monthly Video Uploads",
+        backgroundColor: "rgb(255, 101, 98)",
+        hoverBackgroundColor: "rgb(255, 0, 0)",
+        borderRadius: 10,
+        data: defaultData, // Use the modified array with 0 for missing months
       },
     ],
   };
@@ -41,27 +82,27 @@ const BarChart = () => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false, // Hide legend
+        display: false,
       },
     },
     scales: {
       x: {
         grid: {
-          display: false, // Hide x-axis grid lines
+          display: false,
         },
       },
       y: {
         grid: {
-          display: false, // Hide y-axis grid lines
+          display: false,
         },
         beginAtZero: true,
       },
     },
   };
-  
+
   return (
     <div className="w-full h-full">
-      <Bar data={data} options={options} />
+      {isLoading ? <p>Loading...</p> : <Bar data={data} options={options} />}
     </div>
   );
 };

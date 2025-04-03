@@ -32,14 +32,14 @@ function LoginPage() {
         password,
       });
   
-      const { accessToken, user } = response.data;
+      const { accessToken, user,monthlyVideos } = response.data;
       console.log("user", response.data);
   
       const expiresAt = new Date().getTime() + 7 * 60 * 60 * 1000; // 7 hours in milliseconds
   
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("tokenExpiry", expiresAt); // Store expiration time
-      dispatch(loginSuccess({ user, accessToken }));
+      dispatch(loginSuccess({ user, accessToken,monthlyVideos }));
   
       // Show success toast
       toast.info("Login successful!", {

@@ -27,7 +27,7 @@ import { MdOutlineArrowRight } from "react-icons/md";
 import step2IMg from "../assets/startprocess.svg"
 import step3IMg from "../assets/csvupload.svg"
 
-export default function Landinpage() {
+export default function Landinpage() {65
     const [activeStep, setActiveStep] = useState("one");
     const [isOpen, setIsOpen] = useState(false);
 
@@ -383,7 +383,7 @@ export default function Landinpage() {
                 <div className='bg-[#002b7f] w-full h-full px-3 sm:px-20 py-10'>
                     <div className='flex items-center text-white justify-center sm:justify-start'>
                         <h1 className='font-bold'>@ powered by</h1>
-                        <img src={logosmall} alt="" className="h-16 w-16 filter invert" />
+                        <img src={logosmall} alt="" className="h-14 w-14 filter invert mb-3" />
                         <a href="https://www.reachifyinnovations.com/" target='_blank'>
                         <h1 className='text-2xl comLogo'>Reachify</h1>
                         </a>
@@ -393,10 +393,16 @@ export default function Landinpage() {
                             <h1 className='text-2xl w-full sm:max-w-[30ch] font-semibold'>Start Automating Your Personalized Outreach Today!</h1>
                             <ul className='list-none space-y-2 mt-5'>
 
-                                <li className='flex items-center gap-2 hover:text-neutral-300 cursor-pointer' > ✅ Get More Replies, More Conversions, & More Sales</li>
-                                <li className='flex items-center gap-2 hover:text-neutral-300 cursor-pointer' > ✅ No More Manual Outreach – Let AI Do the Heavy Lifting</li>
-                                <li className='flex items-center gap-2 hover:text-neutral-300 cursor-pointer' >✅ 100% Free Trial – Start in 60 Seconds!</li>
+                                <li className='subheading font-normal flex items-center gap-2 hover:text-neutral-300 cursor-pointer' > ✅ Get More Replies, More Conversions, & More Sales</li>
+                                <li className='subheading flex items-center gap-2 hover:text-neutral-300 cursor-pointer' > ✅ No More Manual Outreach – Let AI Do the Heavy Lifting</li>
+                                <li className='subheading flex items-center gap-2 hover:text-neutral-300 cursor-pointer' >✅ 100% Free Trial – Start in 60 Seconds!</li>
                             </ul>
+                            <div className='mt-10'>
+                        <Link to='/sign-up'>
+                            <button className='text-wrap mt-0 border border-blue-700 hover:bg-transparent hover:border-white hover:border hover:text-white bg-gray-100 px-10 py-3 text-blue-900 rounded-3xl cursor-pointer font-bold relative z-10 transition-all duration-300 ease-in-out'>
+                                Try Loomify Now – No Credit Card Needed!</button>
+                        </Link>
+                    </div>
                         </div>
                         <div className=' w-full sm:w-1/2 flex flex-col sm:flex-row gap-10 sm:items-start justify-between px-7 sm:px-20 my-10 sm:mt-5'>
                             <div>
@@ -408,6 +414,9 @@ export default function Landinpage() {
                                     <a href="https://www.reachifyinnovations.com/blog" target='_blank'>
                                         <li className='text-white hover:text-neutral-300 cursor-pointer'>Blogs</li>
                                     </a>
+                                    <Link to="/pricing-page">
+                                        <li className='text-white hover:text-neutral-300 cursor-pointer'>Pricing Page</li>
+                                    </Link>
                                     <Link to="/privacy-policy">
                                         <li className='text-white hover:text-neutral-300 cursor-pointer'>Privacy Policy</li>
                                     </Link>
@@ -428,8 +437,9 @@ export default function Landinpage() {
                                     <a href="https://www.instagram.com/reachify_ai/" target='_blank'>
                                     <span className='flex items-center gap-2 hover:text-neutral-300 cursor-pointer'><FaInstagram className='text-2xl' />Instagram</span>
                                     </a>
-                                    <a href="https://x.com/Reachify_ai"></a>
+                                    <a href="https://x.com/Reachify_ai">
                                     <span className='flex items-center gap-2 hover:text-neutral-300 cursor-pointer'><FaXTwitter className='text-2xl' />X</span>
+                                    </a>
 
                                     <a href="https://www.facebook.com/profile.php?id=61557950262831" target='_blank'>
                                     <span className='flex items-center gap-2 hover:text-neutral-300 cursor-pointer'><FaFacebookSquare className='text-2xl' />Facebook</span>
@@ -438,12 +448,7 @@ export default function Landinpage() {
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <Link to='/sign-up'>
-                            <button className='text-wrap mt-0 border border-blue-700 hover:bg-transparent hover:border-white hover:border hover:text-white bg-gray-100 px-10 py-3 text-blue-900 rounded-3xl cursor-pointer font-bold relative z-10 transition-all duration-300 ease-in-out'>
-                                Try Loomify Now – No Credit Card Needed!</button>
-                        </Link>
-                    </div>
+                 
                 </div>
                 <div className='bg-[#002b7f] text-white text-xs text-center py-2'>
                     <p>© 2025 Loomify. All Rights Reserved.</p>

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 Chart.register(ArcElement, Tooltip, Legend, Title);
 
-const CreateDoughnutData = () => {
+const CreateDoughnutDataSec = () => {
   const mailCount = useSelector((state) => state.mailCount?.data);
   const user = useSelector((state) => state.user?.user);
   const currPlan = user?.planDetails || "Trial"; // Default to "Trial" if undefined
@@ -14,7 +14,7 @@ const CreateDoughnutData = () => {
   console.log("Mail Count:", mailCount);
 
   // Ensure mailCount exists and has valid values
-  const successMails = mailCount?.successMails ?? 0; // Default to 0 if undefined
+  const successMails = mailCount?.failedMails ?? 0; // Default to 0 if undefined
   const pendingMails = {
     Trial: 30,
     Starter: 2000,
@@ -35,13 +35,14 @@ const CreateDoughnutData = () => {
     datasets: [
       {
         data: [processed, pending], // Adjusted values to ensure visibility
-        backgroundColor: ["rgb(0, 102, 204)", "rgb(0, 153, 255)"],
+        backgroundColor: ["rgb(143, 19, 3)", "rgb(245, 54, 29)"],
         borderWidth: 0,
         radius: "80%",
       },
     ],
   };
 
+  console.log("Final Data in Chart:", data.datasets[0].data);
 
   const options = {
     cutout: "70%", // Adjust thickness of Doughnut chart
@@ -58,4 +59,4 @@ const CreateDoughnutData = () => {
   );
 };
 
-export default CreateDoughnutData;
+export default CreateDoughnutDataSec;
